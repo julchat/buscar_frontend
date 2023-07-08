@@ -1,3 +1,4 @@
+import 'package:buscar_app/presentation/screens/register_screen.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'home_screen.dart';
@@ -20,7 +21,7 @@ class _SplashScreenState extends State<SplashScreen> {
     Timer(const Duration(seconds: 5), () {
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => const HomeScreen()),
+        MaterialPageRoute(builder: (context) => const RegisterScreen()),
       );
     });
   }
