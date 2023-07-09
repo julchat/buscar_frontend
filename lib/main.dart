@@ -13,7 +13,11 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'buscAR',
-      theme: const TemaApp(colorElegido: 0).createTheme(),     
+      debugShowCheckedModeBanner: false,
+      theme: ThemeData(
+        colorScheme: const ColorScheme.highContrastDark()
+      ),
+      //theme: const TemaApp(colorElegido: 0).createTheme(),     
       home: const SplashScreen()
     );
   }
