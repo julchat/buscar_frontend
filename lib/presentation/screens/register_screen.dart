@@ -11,7 +11,8 @@ class RegisterScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Center(child: Text('Nuevo usuario')),
+        title: const Text('NUEVO USUARIO'),
+        centerTitle: true,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () {
@@ -32,16 +33,19 @@ class _RegisterView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const SafeArea(
+    Image logoBuscar = Image.asset('assets/images/buscartransparente.png');
+    return SafeArea(
       child: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 10),
+        padding: const EdgeInsets.symmetric(horizontal: 20),
         child: SingleChildScrollView(
           child: Column(
             // mainAxisAlignment: MainAxisAlignment.end,
             children: [
-              FlutterLogo(size: 100),
-              _RegisterForm(),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
+              logoBuscar,
+              const SizedBox(height: 20),
+              const _RegisterForm(),
+              const SizedBox(height: 20),
             ],
           ),
         ),
@@ -68,32 +72,33 @@ class _RegisterFormState extends State<_RegisterForm> {
     return Form(
         key: _formKey,
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             CustomTextFormField(
-              label: 'Correo electrónico',
+              label: 'CORREO ELECTRÓNICO',
               onChanged: (value) => email = value,
               validator: (value) {
-                if (value == null || value.isEmpty) return 'Campo requerido';
-                if (value.trim().isEmpty) return 'Campo requerido';
+                if (value == null || value.isEmpty) return 'CAMPO REQUERIDO';
+                if (value.trim().isEmpty) return 'CAMPO REQUERIDO';
                 final emailRegExp = RegExp(
                   r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$',
                 );
 
                 if (!emailRegExp.hasMatch(value)) {
-                  return 'No tiene formato de correo';
+                  return 'NO TIENE FORMATO DE CORREO';
                 }
                 return null;
               },
             ),
-            const SizedBox(height: 10),
+            const SizedBox(height: 30),
             CustomTextFormField(
-              label: 'Contraseña',
+              label: 'CONTRASEÑA',
               obscureText: true,
               onChanged: (value) => password = value,
               validator: (value) {
-                if (value == null || value.isEmpty) return 'Campo requerido';
-                if (value.trim().isEmpty) return 'Campo requerido';
-                if (value.length < 6) return 'Más de 6 letras';
+                if (value == null || value.isEmpty) return 'CAMPO REQUERIDO';
+                if (value.trim().isEmpty) return 'CAMPO REQUERIDO';
+                if (value.length < 6) return 'MÁS DE 6 CARACTERES';
                 final contraseniaRegExp =
                     RegExp(r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])$');
                 //r'^
@@ -101,12 +106,33 @@ class _RegisterFormState extends State<_RegisterForm> {
                 //(?=.*[a-z])       // Al menos una minúscula
                 //(?=.*?[0-9])      // Al menos un dígito
                 if (!contraseniaRegExp.hasMatch(value)) {
-                  return 'La contraseña debe tener al menos una mayúscula, una minúscula y un dígito';
+                  return 'La contraseña debe tener al menos una mayúscula, una minúscula y un dígito'.toUpperCase();
                 }
                 return null;
               },
             ),
-            const SizedBox(height: 20),
+            const SizedBox(height: 30),
+            CustomTextFormField(
+              label: 'REPITA CONTRASEÑA',
+              obscureText: true,
+              onChanged: (value) => password = value,
+              validator: (value) {
+                if (value == null || value.isEmpty) return 'CAMPO REQUERIDO';
+                if (value.trim().isEmpty) return 'CAMPO REQUERIDO';
+                if (value.length < 6) return 'MÁS DE 6 CARACTERES';
+                final contraseniaRegExp =
+                    RegExp(r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])$');
+                //r'^
+                //(?=.*[A-Z])       // Al menos una mayúscula
+                //(?=.*[a-z])       // Al menos una minúscula
+                //(?=.*?[0-9])      // Al menos un dígito
+                if (!contraseniaRegExp.hasMatch(value)) {
+                  return 'La contraseña debe tener al menos una mayúscula, una minúscula y un dígito'.toUpperCase();
+                }
+                return null;
+              },
+            ),
+            const SizedBox(height: 30),
             FilledButton.tonalIcon(
               onPressed: () {
                 final isValid = _formKey.currentState!.validate();
@@ -115,8 +141,10 @@ class _RegisterFormState extends State<_RegisterForm> {
                 print('$email, $password, $passwordRepetida');
               },
               icon: const Icon(Icons.save),
-              label: const Text('Crear usuario'),
+              label: const Text('CREAR USUARIO'),
             ),
+            const SizedBox(height:15),
+            const Center(child: Text('Al presionar "Crear Usuario" usted acepta nuestros términos y condiciones',textAlign: TextAlign.center,))
           ],
         ));
   }

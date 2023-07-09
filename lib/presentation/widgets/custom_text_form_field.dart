@@ -38,8 +38,8 @@ class CustomTextFormField extends StatelessWidget {
       decoration: InputDecoration(
         enabledBorder: border,
         focusedBorder: border.copyWith( borderSide: BorderSide( color: colors.primary )),
-        errorBorder: border.copyWith( borderSide: BorderSide( color: Colors.red.shade800 )),
-        focusedErrorBorder: border.copyWith( borderSide: BorderSide( color: Colors.red.shade800 )),
+        errorBorder: border.copyWith( borderSide: const BorderSide( color: Color.fromARGB(253, 255, 0, 64) )),
+        focusedErrorBorder: border.copyWith( borderSide: const BorderSide( color: Color.fromARGB(253, 255, 0, 64) )),
 
         isDense: true,
         label: label != null ? Text(label!) : null,

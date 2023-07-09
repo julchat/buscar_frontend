@@ -15,7 +15,20 @@ class MyApp extends StatelessWidget {
       title: 'buscAR',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        colorScheme: const ColorScheme.highContrastDark()
+        scaffoldBackgroundColor:const Color(0xFF010101),
+        appBarTheme: const AppBarTheme(
+          iconTheme: IconThemeData(size:40, color: Colors.black),
+        ),
+        colorScheme: const ColorScheme.highContrastDark(
+          primary: Color(0xFFFFF81F),
+          secondary:Color(0xFFFFF81F), 
+          error: Color.fromARGB(253, 255, 0, 64), 
+          background: Color(0xFF010101),
+          onBackground: Color(0xFFFFF81F),
+          surface: Color(0xFFFFF81F),
+          onSurface: Color(0xFF010101),
+
+          )
       ),
       //theme: const TemaApp(colorElegido: 0).createTheme(),     
       home: const SplashScreen()
