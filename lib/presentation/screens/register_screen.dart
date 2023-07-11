@@ -1,6 +1,7 @@
 import 'package:buscar_app/presentation/screens/login_screen.dart';
 import 'package:buscar_app/presentation/screens/splash_screen.dart';
 import 'package:buscar_app/presentation/widgets/custom_text_form_field.dart';
+import 'package:buscar_app/presentation/widgets/texto_terminos_y_servicios.dart';
 import 'package:flutter/material.dart';
 //import 'package:forms_app/presentation/widgets/widgets.dart';
 
@@ -41,9 +42,9 @@ class _RegisterView extends StatelessWidget {
           child: Column(
             // mainAxisAlignment: MainAxisAlignment.end,
             children: [
-              const SizedBox(height: 20),
+              const SizedBox(height: 40),
               logoBuscar,
-              const SizedBox(height: 20),
+              const SizedBox(height: 40),
               const _RegisterForm(),
               const SizedBox(height: 20),
             ],
@@ -90,7 +91,7 @@ class _RegisterFormState extends State<_RegisterForm> {
                 return null;
               },
             ),
-            const SizedBox(height: 30),
+            const SizedBox(height: 50),
             CustomTextFormField(
               label: 'CONTRASEÑA',
               obscureText: true,
@@ -100,34 +101,26 @@ class _RegisterFormState extends State<_RegisterForm> {
                 if (value.trim().isEmpty) return 'CAMPO REQUERIDO';
                 if (value.length < 6) return 'MÁS DE 6 CARACTERES';
                 final contraseniaRegExp =
-                    RegExp(r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])$');
+                    RegExp(r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])');
                 //r'^
                 //(?=.*[A-Z])       // Al menos una mayúscula
                 //(?=.*[a-z])       // Al menos una minúscula
                 //(?=.*?[0-9])      // Al menos un dígito
                 if (!contraseniaRegExp.hasMatch(value)) {
-                  return 'La contraseña debe tener al menos una mayúscula, una minúscula y un dígito'.toUpperCase();
+                  return 'La contraseña debe tener al menos una mayúscula, una minúscula y un dígito'
+                      .toUpperCase();
                 }
                 return null;
               },
             ),
-            const SizedBox(height: 30),
+            const SizedBox(height: 50),
             CustomTextFormField(
               label: 'REPITA CONTRASEÑA',
               obscureText: true,
-              onChanged: (value) => password = value,
+              onChanged: (value) => passwordRepetida = value,
               validator: (value) {
-                if (value == null || value.isEmpty) return 'CAMPO REQUERIDO';
-                if (value.trim().isEmpty) return 'CAMPO REQUERIDO';
-                if (value.length < 6) return 'MÁS DE 6 CARACTERES';
-                final contraseniaRegExp =
-                    RegExp(r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])$');
-                //r'^
-                //(?=.*[A-Z])       // Al menos una mayúscula
-                //(?=.*[a-z])       // Al menos una minúscula
-                //(?=.*?[0-9])      // Al menos un dígito
-                if (!contraseniaRegExp.hasMatch(value)) {
-                  return 'La contraseña debe tener al menos una mayúscula, una minúscula y un dígito'.toUpperCase();
+                if (passwordRepetida != password) {
+                  return 'LAS CONTRASEÑAS DEBEN COINCIDIR';
                 }
                 return null;
               },
@@ -140,11 +133,13 @@ class _RegisterFormState extends State<_RegisterForm> {
 
                 print('$email, $password, $passwordRepetida');
               },
-              icon: const Icon(Icons.save),
-              label: const Text('CREAR USUARIO'),
+              icon: const Icon(Icons.person, size: 40,),
+              label: const Text('CREAR USUARIO', style: TextStyle(fontSize: 20,fontWeight: FontWeight.w700)),
+              style: ButtonStyle(minimumSize: MaterialStateProperty.all(const Size(40,65)))
             ),
-            const SizedBox(height:15),
-            const Center(child: Text('Al presionar "Crear Usuario" usted acepta nuestros términos y condiciones',textAlign: TextAlign.center,))
+            const SizedBox(height: 30),
+            Center(
+                child: privacyPolicyLinkAndTermsOfService())
           ],
         ));
   }
