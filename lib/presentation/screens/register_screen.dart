@@ -22,6 +22,7 @@ class RegisterScreen extends StatelessWidget {
               MaterialPageRoute(builder: (context) => const SplashScreen()),
             );
           },
+          tooltip: 'Volver hacia atrás',
         ),
       ),
       body: const _RegisterView(),
@@ -100,15 +101,21 @@ class _RegisterFormState extends State<_RegisterForm> {
                 if (value == null || value.isEmpty) return 'CAMPO REQUERIDO';
                 if (value.trim().isEmpty) return 'CAMPO REQUERIDO';
                 if (value.length < 6) return 'MÁS DE 6 CARACTERES';
-                final contraseniaRegExp =
-                    RegExp(r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])');
+                final contraseniaRegExpMayusc = RegExp(r'^(?=.*?[A-Z])');
+                final contraseniaRegExpMinusc = RegExp(r'^(?=.*?[a-z])');
+                final contraseniaRegExpDigito = RegExp(r'^(?=.*?[0-9])');
                 //r'^
                 //(?=.*[A-Z])       // Al menos una mayúscula
                 //(?=.*[a-z])       // Al menos una minúscula
                 //(?=.*?[0-9])      // Al menos un dígito
-                if (!contraseniaRegExp.hasMatch(value)) {
-                  return 'La contraseña debe tener al menos una mayúscula, una minúscula y un dígito'
-                      .toUpperCase();
+                if (!contraseniaRegExpMayusc.hasMatch(value)) {
+                  return 'La contraseña debe tener al menos una mayúscula'.toUpperCase();
+                }
+                if (!contraseniaRegExpMinusc.hasMatch(value)) {
+                  return 'La contraseña debe tener al menos una minúscula'.toUpperCase();
+                }
+                if (!contraseniaRegExpDigito.hasMatch(value)) {
+                  return 'La contraseña debe tener al menos un dígito'.toUpperCase();
                 }
                 return null;
               },
@@ -119,27 +126,29 @@ class _RegisterFormState extends State<_RegisterForm> {
               obscureText: true,
               onChanged: (value) => passwordRepetida = value,
               validator: (value) {
-                if (passwordRepetida != password) {
+                if (value != password) {
                   return 'LAS CONTRASEÑAS DEBEN COINCIDIR';
                 }
                 return null;
               },
             ),
             const SizedBox(height: 30),
-            FilledButton.tonalIcon(
-              onPressed: () {
-                final isValid = _formKey.currentState!.validate();
-                if (!isValid) return;
-
-                print('$email, $password, $passwordRepetida');
-              },
-              icon: const Icon(Icons.person, size: 40,),
-              label: const Text('CREAR USUARIO', style: TextStyle(fontSize: 20,fontWeight: FontWeight.w700)),
-              style: ButtonStyle(minimumSize: MaterialStateProperty.all(const Size(40,65)))
-            ),
+            Center(child: privacyPolicyLinkAndTermsOfService(context)),
             const SizedBox(height: 30),
-            Center(
-                child: privacyPolicyLinkAndTermsOfService())
+            FilledButton.tonalIcon(
+                onPressed: () {
+                  final isValid = _formKey.currentState!.validate();
+                  if (!isValid) return;
+
+                  print('$email, $password, $passwordRepetida');
+                },
+                icon: const Icon(Icons.person, size: 40),
+                label: const Text('CREAR USUARIO',
+                    style:
+                        TextStyle(fontSize: 20, fontWeight: FontWeight.w700)),
+                style: ButtonStyle(
+                    minimumSize:
+                        MaterialStateProperty.all(const Size(40, 65)))),
           ],
         ));
   }
