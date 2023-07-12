@@ -1,6 +1,5 @@
 import 'package:buscar_app/presentation/screens/splash_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:buscar_app/presentation/config/tema_app.dart';
 void main() {
   runApp(const MyApp());
 }

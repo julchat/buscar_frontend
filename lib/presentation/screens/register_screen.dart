@@ -1,5 +1,4 @@
 import 'package:buscar_app/presentation/screens/login_screen.dart';
-import 'package:buscar_app/presentation/screens/splash_screen.dart';
 import 'package:buscar_app/presentation/widgets/custom_text_form_field.dart';
 import 'package:buscar_app/presentation/widgets/texto_terminos_y_servicios.dart';
 import 'package:flutter/material.dart';
@@ -19,7 +18,7 @@ class RegisterScreen extends StatelessWidget {
           onPressed: () {
             Navigator.pushReplacement(
               context,
-              MaterialPageRoute(builder: (context) => const SplashScreen()),
+              MaterialPageRoute(builder: (context) => const LoginScreen()),
             );
           },
           tooltip: 'Volver hacia atrás',
@@ -133,7 +132,7 @@ class _RegisterFormState extends State<_RegisterForm> {
               },
             ),
             const SizedBox(height: 30),
-            Center(child: privacyPolicyLinkAndTermsOfService(context)),
+            const Center(child: PrivacyPolicyLinkAndTermsOfService()),
             const SizedBox(height: 30),
             FilledButton.tonalIcon(
                 onPressed: () {

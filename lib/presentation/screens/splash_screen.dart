@@ -1,7 +1,7 @@
-import 'package:buscar_app/presentation/screens/register_screen.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
-import 'home_screen.dart';
+
+import 'login_screen.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -21,7 +21,7 @@ class _SplashScreenState extends State<SplashScreen> {
     Timer(const Duration(seconds: 5), () {
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => const RegisterScreen()),
+        MaterialPageRoute(builder: (context) => const LoginScreen()),
       );
     });
   }

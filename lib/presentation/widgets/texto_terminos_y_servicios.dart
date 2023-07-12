@@ -1,8 +1,11 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
-Widget privacyPolicyLinkAndTermsOfService(BuildContext context) {
-  return Container(
+class PrivacyPolicyLinkAndTermsOfService extends StatelessWidget{
+  const PrivacyPolicyLinkAndTermsOfService({super.key});
+  @override
+  Widget build(BuildContext context) {
+    return Container(
     alignment: Alignment.center,
     padding: const EdgeInsets.all(10),
     child: Center(
@@ -34,4 +37,5 @@ Widget privacyPolicyLinkAndTermsOfService(BuildContext context) {
         style: const TextStyle(fontSize: 20),
         )),
   );
+  }
 }
