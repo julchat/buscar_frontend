@@ -3,6 +3,7 @@ import 'package:buscar_app/presentation/screens/splash_screen.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:buscar_app/presentation/widgets/custom_text_form_field.dart';
+import 'package:get/get.dart';
 
 import 'home_screen.dart';
 
@@ -94,10 +95,7 @@ class _LoginFormState extends State<_LoginForm> {
                   final isValid = _formKey.currentState!.validate();
                   if (!isValid) return;
                   //TODO: Generar alguna persistencia de credenciales para logeo automatico o sessionID
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(builder: (context) => const HomeScreen()),
-                  );
+                  Get.to(const HomeScreen());
                   print('$email, $password');
                 },
                 icon: const Icon(Icons.door_sliding, size: 40),
@@ -110,8 +108,7 @@ class _LoginFormState extends State<_LoginForm> {
             const SizedBox(height: 30),
             FilledButton.tonalIcon(
                 onPressed: () {
-                  MaterialPageRoute(
-                      builder: (context) => const RegisterScreen());
+                  Get.to(const RegisterScreen());
                 },
                 icon: const Icon(Icons.person_add_alt_1, size: 40),
                 label: const Text('NUEVO USUARIO',

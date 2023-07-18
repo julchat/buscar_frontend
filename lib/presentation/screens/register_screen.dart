@@ -1,7 +1,14 @@
+import 'package:buscar_app/domain/forms/register_form.dart';
+import 'package:buscar_app/presentation/screens/loading_screen.dart';
 import 'package:buscar_app/presentation/screens/login_screen.dart';
 import 'package:buscar_app/presentation/widgets/custom_text_form_field.dart';
 import 'package:buscar_app/presentation/widgets/texto_terminos_y_servicios.dart';
 import 'package:flutter/material.dart';
+import 'package:buscar_app/infrastructure/conector_backend.dart';
+import 'package:get/get.dart';
+
+import '../../domain/controllers/loading_controller.dart';
+import '../../infrastructure/respuesta.dart';
 //import 'package:forms_app/presentation/widgets/widgets.dart';
 
 class RegisterScreen extends StatelessWidget {
@@ -108,13 +115,16 @@ class _RegisterFormState extends State<_RegisterForm> {
                 //(?=.*[a-z])       // Al menos una minúscula
                 //(?=.*?[0-9])      // Al menos un dígito
                 if (!contraseniaRegExpMayusc.hasMatch(value)) {
-                  return 'La contraseña debe tener al menos una mayúscula'.toUpperCase();
+                  return 'La contraseña debe tener al menos una mayúscula'
+                      .toUpperCase();
                 }
                 if (!contraseniaRegExpMinusc.hasMatch(value)) {
-                  return 'La contraseña debe tener al menos una minúscula'.toUpperCase();
+                  return 'La contraseña debe tener al menos una minúscula'
+                      .toUpperCase();
                 }
                 if (!contraseniaRegExpDigito.hasMatch(value)) {
-                  return 'La contraseña debe tener al menos un dígito'.toUpperCase();
+                  return 'La contraseña debe tener al menos un dígito'
+                      .toUpperCase();
                 }
                 return null;
               },
@@ -135,11 +145,33 @@ class _RegisterFormState extends State<_RegisterForm> {
             const Center(child: PrivacyPolicyLinkAndTermsOfService()),
             const SizedBox(height: 30),
             FilledButton.tonalIcon(
-                onPressed: () {
+                onPressed: () async {
                   final isValid = _formKey.currentState!.validate();
                   if (!isValid) return;
 
-                  print('$email, $password, $passwordRepetida');
+                  Get.off(const LoadingScreen());
+
+
+                  String jsonRegistro =
+                      RegisterForm(usuario: email, contrasenia: password)
+                          .aJson();
+                ConectorBackend conector = ConectorBackend(
+                          ruta: '/registro',
+                          method: HttpMethod.post,
+                          body: jsonRegistro);
+                  
+                Respuesta respuesta =  await conector.hacerRequest();
+
+                if (respuesta.estado == EstadoRespuesta.finalizadaOk){
+                  if (respuesta.respuestaExistente?.statusCode == 200){
+                    LoadingController loadingController = Get.find();
+                    loadingController.handleServerResponse();
+                  }
+                  
+                }else{
+                  Get.snackbar('Error', 'Hubo un problema en el registro');
+                }
+
                 },
                 icon: const Icon(Icons.person, size: 40),
                 label: const Text('CREAR USUARIO',
