@@ -89,7 +89,7 @@ class _RegisterFormState extends State<_RegisterForm> {
                 if (value == null || value.isEmpty) return 'CAMPO REQUERIDO';
                 if (value.trim().isEmpty) return 'CAMPO REQUERIDO';
                 final emailRegExp = RegExp(
-                  r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$',
+                  r'^[a-zA-Z0-9ñ]+([\.-]?[a-zA-Z0-9ñ]+)*@([a-zA-Z0-9ñ]+([\.-]?[a-zA-Z0-9ñ]+)*)+\.[a-zA-Z]{2,4}$',
                 );
 
                 if (!emailRegExp.hasMatch(value)) {
@@ -152,11 +152,11 @@ class _RegisterFormState extends State<_RegisterForm> {
                   Get.off(const LoadingScreen());
 
 
-                  String jsonRegistro =
+                  Map<String,String> jsonRegistro =
                       RegisterForm(usuario: email, contrasenia: password)
-                          .aJson();
+                          .aMap();
                 ConectorBackend conector = ConectorBackend(
-                          ruta: '/registro',
+                          ruta: '/register_flutter/',
                           method: HttpMethod.post,
                           body: jsonRegistro);
                   

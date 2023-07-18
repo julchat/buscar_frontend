@@ -1,4 +1,6 @@
 import 'package:buscar_app/domain/controllers/loading_controller.dart';
+import 'package:buscar_app/infrastructure/conector_backend.dart';
+import 'package:buscar_app/infrastructure/csrftoken_controller.dart';
 import 'package:buscar_app/presentation/screens/splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -13,7 +15,9 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+    Get.put(CsrfTokenController());
     Get.put(LoadingController());
+    ConectorBackend(ruta: 'csrf_token/', method: HttpMethod.get).getCsrfToken();
     return GetMaterialApp(
         title: 'buscAR',
         debugShowCheckedModeBanner: false,

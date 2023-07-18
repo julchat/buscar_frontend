@@ -1,3 +1,4 @@
+import 'package:buscar_app/presentation/screens/loading_screen.dart';
 import 'package:buscar_app/presentation/screens/register_screen.dart';
 import 'package:buscar_app/presentation/screens/splash_screen.dart';
 import 'package:flutter/gestures.dart';
@@ -5,6 +6,9 @@ import 'package:flutter/material.dart';
 import 'package:buscar_app/presentation/widgets/custom_text_form_field.dart';
 import 'package:get/get.dart';
 
+import '../../domain/forms/login_form.dart';
+import '../../infrastructure/conector_backend.dart';
+import '../../infrastructure/respuesta.dart';
 import 'home_screen.dart';
 
 class LoginScreen extends StatelessWidget {
@@ -73,7 +77,6 @@ class _LoginFormState extends State<_LoginForm> {
               validator: (value) {
                 if (value == null || value.isEmpty) return 'CAMPO REQUERIDO';
                 if (value.trim().isEmpty) return 'CAMPO REQUERIDO';
-                //TODO: Validación de Mail contra DB.
                 return null;
               },
             ),
@@ -85,18 +88,26 @@ class _LoginFormState extends State<_LoginForm> {
               validator: (value) {
                 if (value == null || value.isEmpty) return 'CAMPO REQUERIDO';
                 if (value.trim().isEmpty) return 'CAMPO REQUERIDO';
-                //TODO: Validación de Contraseña contra DB
                 return null;
               },
             ),
             const SizedBox(height: 30),
             FilledButton.tonalIcon(
-                onPressed: () {
+                onPressed: () async {
                   final isValid = _formKey.currentState!.validate();
                   if (!isValid) return;
-                  //TODO: Generar alguna persistencia de credenciales para logeo automatico o sessionID
-                  Get.to(const HomeScreen());
-                  print('$email, $password');
+
+                  Get.off(const LoadingScreen());
+                  Map<String, String> jsonRegistro =
+                      LoginForm(usuario: email, contrasenia: password)
+                          .aMap();
+                  ConectorBackend conector = ConectorBackend(
+                      ruta: '/login_flutter/',
+                      method: HttpMethod.post,
+                      body: jsonRegistro);
+
+                  Respuesta respuesta = await conector.hacerRequest();
+                  print(respuesta.respuestaExistente?.body);
                 },
                 icon: const Icon(Icons.door_sliding, size: 40),
                 label: const Text('INICIAR SESIÓN',
@@ -108,7 +119,7 @@ class _LoginFormState extends State<_LoginForm> {
             const SizedBox(height: 30),
             FilledButton.tonalIcon(
                 onPressed: () {
-                  Get.to(const RegisterScreen());
+                  Get.to(() => const RegisterScreen());
                 },
                 icon: const Icon(Icons.person_add_alt_1, size: 40),
                 label: const Text('NUEVO USUARIO',

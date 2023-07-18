@@ -14,8 +14,8 @@ class LoadingScreen extends GetView<LoadingController> {
         () => controller.isLoading.value
             ? const Center(
                 child: SpinKitFadingCircle(
-                  size: 50.0,
-                  color: Colors.blue,
+                  size: 250.0,
+                  color: Colors.yellow,
                 ),
               )
             : const SizedBox(),
