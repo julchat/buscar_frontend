@@ -1,15 +1,16 @@
 import 'package:buscar_app/presentation/screens/loading_screen.dart';
 import 'package:buscar_app/presentation/screens/register_screen.dart';
 import 'package:buscar_app/presentation/screens/splash_screen.dart';
+import 'package:buscar_app/presentation/widgets/boton_custom.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:buscar_app/presentation/widgets/custom_text_form_field.dart';
 import 'package:get/get.dart';
 
+import '../../domain/controllers/loading_controller.dart';
 import '../../domain/forms/login_form.dart';
 import '../../infrastructure/conector_backend.dart';
 import '../../infrastructure/respuesta.dart';
-import 'home_screen.dart';
 
 class LoginScreen extends StatelessWidget {
   const LoginScreen({super.key});
@@ -92,8 +93,9 @@ class _LoginFormState extends State<_LoginForm> {
               },
             ),
             const SizedBox(height: 30),
-            FilledButton.tonalIcon(
-                onPressed: () async {
+
+          
+            BotonCustomConIcono(onPressed: () async {
                   final isValid = _formKey.currentState!.validate();
                   if (!isValid) return;
 
@@ -107,27 +109,18 @@ class _LoginFormState extends State<_LoginForm> {
                       body: jsonRegistro);
 
                   Respuesta respuesta = await conector.hacerRequest();
-                  print(respuesta.respuestaExistente?.body);
-                },
-                icon: const Icon(Icons.door_sliding, size: 40),
-                label: const Text('INICIAR SESIÓN',
-                    style:
-                        TextStyle(fontSize: 20, fontWeight: FontWeight.w700)),
-                style: ButtonStyle(
-                    minimumSize:
-                        MaterialStateProperty.all(const Size(40, 65)))),
+                  LoadingController loadingController = Get.find();
+                  loadingController.handleServerResponseLogin(respuesta);
+                }
+            , contenido: 'INICIAR SESIÓN', icono: Icons.door_sliding),
+           
+
             const SizedBox(height: 30),
-            FilledButton.tonalIcon(
-                onPressed: () {
-                  Get.to(() => const RegisterScreen());
-                },
-                icon: const Icon(Icons.person_add_alt_1, size: 40),
-                label: const Text('NUEVO USUARIO',
-                    style:
-                        TextStyle(fontSize: 20, fontWeight: FontWeight.w700)),
-                style: ButtonStyle(
-                    minimumSize:
-                        MaterialStateProperty.all(const Size(40, 65)))),
+
+            BotonCustomConIcono(onPressed: () => Get.to(() => const RegisterScreen()),
+            contenido: 'NUEVO USUARIO',
+            icono: Icons.person_add_alt_1,),
+
             const SizedBox(height: 15),
             Container(
                 alignment: Alignment.center,
@@ -153,4 +146,7 @@ class _LoginFormState extends State<_LoginForm> {
           ],
         ));
   }
+
+  
 }
+

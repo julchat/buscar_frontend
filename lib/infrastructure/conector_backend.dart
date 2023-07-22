@@ -61,7 +61,7 @@ class ConectorBackend {
   }
 
   Future<void> getCsrfToken() async {
-    final response = await http.get(uri).timeout(const Duration(seconds: 40));
+    final response =  await http.get(uri).timeout(const Duration(seconds: 40));
 
     if (response.statusCode == 200) {
       final token =

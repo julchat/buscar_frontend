@@ -20,7 +20,7 @@ class _SplashScreenState extends State<SplashScreen> {
 
   void redirigirScreen() {
     Timer(const Duration(seconds: 5), () {
-      Get.off(() => LoginScreen());
+      Get.off(() => const LoginScreen());
     });
   }
 

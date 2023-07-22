@@ -149,7 +149,7 @@ class _RegisterFormState extends State<_RegisterForm> {
                   final isValid = _formKey.currentState!.validate();
                   if (!isValid) return;
 
-                  Get.off(const LoadingScreen());
+                  Get.off(() => const LoadingScreen());
 
 
                   Map<String,String> jsonRegistro =
@@ -161,16 +161,8 @@ class _RegisterFormState extends State<_RegisterForm> {
                           body: jsonRegistro);
                   
                 Respuesta respuesta =  await conector.hacerRequest();
-
-                if (respuesta.estado == EstadoRespuesta.finalizadaOk){
-                  if (respuesta.respuestaExistente?.statusCode == 200){
-                    LoadingController loadingController = Get.find();
-                    loadingController.handleServerResponse();
-                  }
-                  
-                }else{
-                  Get.snackbar('Error', 'Hubo un problema en el registro');
-                }
+                LoadingController loadingController = Get.find();
+                loadingController.handleServerResponseRegister(respuesta);
 
                 },
                 icon: const Icon(Icons.person, size: 40),
