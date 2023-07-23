@@ -5,7 +5,6 @@ import 'package:get/get.dart';
 
 class FailedRegister extends StatelessWidget {
   final String? mensajeDeError;
-
   const FailedRegister({super.key, this.mensajeDeError});
 
   @override

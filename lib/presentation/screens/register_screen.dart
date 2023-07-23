@@ -20,13 +20,12 @@ class RegisterScreen extends StatelessWidget {
       appBar: AppBar(
         title: const Text('NUEVO USUARIO'),
         centerTitle: true,
-        leading: IconButton(
+          leading: IconButton(
+          padding: const EdgeInsets.only(bottom: 1, left: 5),
           icon: const Icon(Icons.arrow_back),
+          iconSize: 55,
           onPressed: () {
-            Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(builder: (context) => const LoginScreen()),
-            );
+            Get.off(() => const LoginScreen());
           },
           tooltip: 'Volver hacia atrás',
         ),
@@ -151,19 +150,17 @@ class _RegisterFormState extends State<_RegisterForm> {
 
                   Get.off(() => const LoadingScreen());
 
-
-                  Map<String,String> jsonRegistro =
+                  Map<String, String> jsonRegistro =
                       RegisterForm(usuario: email, contrasenia: password)
                           .aMap();
-                ConectorBackend conector = ConectorBackend(
-                          ruta: '/register_flutter/',
-                          method: HttpMethod.post,
-                          body: jsonRegistro);
-                  
-                Respuesta respuesta =  await conector.hacerRequest();
-                LoadingController loadingController = Get.find();
-                loadingController.handleServerResponseRegister(respuesta);
+                  ConectorBackend conector = ConectorBackend(
+                      ruta: '/register_flutter/',
+                      method: HttpMethod.post,
+                      body: jsonRegistro);
 
+                  Respuesta respuesta = await conector.hacerRequest();
+                  LoadingController loadingController = Get.find();
+                  loadingController.handleServerResponseRegister(respuesta);
                 },
                 icon: const Icon(Icons.person, size: 40),
                 label: const Text('CREAR USUARIO',

@@ -1,8 +1,10 @@
-import 'package:buscar_app/presentation/screens/login_screen.dart';
+import 'package:buscar_app/domain/controllers/loading_controller.dart';
+import 'package:buscar_app/presentation/screens/loading_screen.dart';
 import 'package:buscar_app/presentation/widgets/boton_custom.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
+import 'package:buscar_app/infrastructure/conector_backend.dart';
+import '../../infrastructure/respuesta.dart';
 import 'items_screen.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -20,7 +22,12 @@ class HomeScreen extends StatelessWidget {
           const SizedBox(height: 120),
           BotonCustomSinIconoXL(onPressed: () => Get.to(()=> const ItemsScreen()) , contenido: ('CATÁLOGO')),
           const SizedBox(height: 120),
-          BotonCustomSinIconoXL(onPressed: () => Get.off(()=> const LoginScreen()), contenido: ('CERRAR SESIÓN')),
+          BotonCustomSinIconoXL(onPressed: () async {
+            Get.off(() => const LoadingScreen());
+            Respuesta respuesta = await ConectorBackend(ruta: '/logout_flutter/', method: HttpMethod.post).hacerRequest();
+            LoadingController().handleServerResponseLogout(respuesta);
+          } 
+            , contenido: ('CERRAR SESIÓN')),
           const SizedBox(height: 120),
           BotonCustomSinIconoXL(onPressed: () => (), contenido: 'CAMBIAR CONTRASEÑA'),
           const SizedBox(height: 120),

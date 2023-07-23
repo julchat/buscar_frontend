@@ -3,5 +3,5 @@ import 'package:get/get.dart';
 import '../../infrastructure/respuesta.dart';
 
 class ItemsController extends GetxController {
-
+  
 }
