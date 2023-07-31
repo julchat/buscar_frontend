@@ -1,3 +1,4 @@
+import 'package:buscar_app/domain/controllers/item_search_controller.dart';
 import 'package:buscar_app/domain/controllers/items_controller.dart';
 import 'package:buscar_app/domain/controllers/loading_controller.dart';
 import 'package:buscar_app/infrastructure/conector_backend.dart';
@@ -19,6 +20,8 @@ class MyApp extends StatelessWidget {
     Get.put(CsrfTokenController());
     Get.put(LoadingController());
     Get.put(ItemsController());
+    Get.put(ItemSearchController());
+    
     ConectorBackend(ruta: 'csrf_token/', method: HttpMethod.get).getCsrfToken();
     return GetMaterialApp(
         title: 'buscAR',
