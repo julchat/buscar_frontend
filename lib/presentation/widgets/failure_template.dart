@@ -5,11 +5,20 @@ class FailureTemplate extends StatelessWidget {
   final String textoDeResultado;
   final String textoDeBoton;
   final void Function() onPressed;
+  final String? textoDeBoton2;
+  final void Function()? onPressedBoton2;
+  final String? textoDeBoton3;
+  final void Function()? onPressedBoton3;
   const FailureTemplate(
       {super.key,
       required this.textoDeBoton,
       required this.textoDeResultado,
-      required this.onPressed});
+      required this.onPressed,
+      this.textoDeBoton2,
+      this.onPressedBoton2,
+      this.textoDeBoton3,
+      this.onPressedBoton3,
+      });
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +35,13 @@ class FailureTemplate extends StatelessWidget {
         const SizedBox(height: 50),
         Center(child: Text(textoDeResultado, style: const TextStyle(color: Colors.yellow, fontSize: 40, fontWeight: FontWeight.w600), textAlign: TextAlign.center,)),
         const SizedBox(height: 50),
-        BotonCustomSinIcono(onPressed: onPressed, contenido: textoDeBoton)
+        BotonCustomSinIcono(onPressed: onPressed, contenido: textoDeBoton),
+        if (textoDeBoton2 != null)
+          const SizedBox(height: 30),
+          BotonCustomSinIcono(onPressed: onPressedBoton2, contenido: textoDeBoton2!),
+        if(textoDeBoton3 != null)
+        const SizedBox(height: 30),
+          BotonCustomSinIcono(onPressed: onPressedBoton3, contenido: textoDeBoton3!)
       ],
     )))));
   }

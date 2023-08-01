@@ -25,8 +25,8 @@ class HomeScreen extends StatelessWidget {
           BotonCustomSinIconoXL(onPressed: () async {
             Get.off(() => const LoadingScreen());
             Respuesta respuesta = await ConectorBackend(ruta: '/logout_flutter/', method: HttpMethod.post).hacerRequest();
-            LoadingController().handleServerResponseLogout(respuesta);
-          } 
+            Get.find<LoadingController>().handleServerResponseLogout(respuesta);
+          }
             , contenido: ('CERRAR SESIÓN')),
           const SizedBox(height: 120),
           BotonCustomSinIconoXL(onPressed: () => (), contenido: 'CAMBIAR CONTRASEÑA'),

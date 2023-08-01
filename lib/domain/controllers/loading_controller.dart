@@ -3,6 +3,7 @@ import 'package:buscar_app/presentation/screens/login_screen.dart';
 import 'package:buscar_app/presentation/screens/result_screens/failed_register.dart';
 import 'package:buscar_app/presentation/screens/result_screens/failed_login.dart';
 import 'package:buscar_app/presentation/screens/result_screens/failed_logout.dart';
+import 'package:buscar_app/presentation/screens/result_screens/failed_search.dart';
 import 'package:buscar_app/presentation/screens/result_screens/successful_register.dart';
 import 'package:get/get.dart';
 import '../../infrastructure/respuesta.dart';
@@ -57,10 +58,24 @@ class LoadingController extends GetxController {
         Get.off(() => FailedLogout(mensajeDeError: mensajeError));
       }
     } else {
-        mensajeError = 'HUBO UN PROBLEMA DE CONEXIÓN';
-        Get.off(() => FailedLogout(mensajeDeError: mensajeError));
+      mensajeError = 'HUBO UN PROBLEMA DE CONEXIÓN';
+      Get.off(() => FailedLogout(mensajeDeError: mensajeError));
     }
+  }
 
+  void handleServerResponseSearchItem(Respuesta respuesta) {
+    String? mensajeError;
+
+    if (respuesta.estado == EstadoRespuesta.finalizadaOk) {
+      if (respuesta.respuestaExistente?.statusCode == 200) {
+        Get.off(() => ());
+      } else {
+        mensajeError = respuesta.respuestaExistente?.body;
+        Get.off(() => const FailedSearch());
+      }
     }
+    if (respuesta.estado == EstadoRespuesta.timeOut) {
+      Get.off(() => const FailedSearch(mensajeDeError: 'HUBO UN PROBLEMA DE CONEXIÓN'));
+    }
+  }
 }
-
