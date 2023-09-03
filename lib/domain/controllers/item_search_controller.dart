@@ -6,6 +6,7 @@ import 'package:image_picker/image_picker.dart';
 import '../../infrastructure/conector_backend.dart';
 import '../objeto.dart';
 import 'dart:io';
+import '../filea64.dart';
 
 class ItemSearchController extends GetxController {
   final Rx<File?> _imageFile = Rx<File?>(null);
@@ -23,18 +24,19 @@ class ItemSearchController extends GetxController {
       _imageFile.value = File(pickedFile.path);
 
       iniciarBusqueda();
-
     }
   }
 
-  void iniciarBusqueda() async{
-          Get.off(() => const LoadingScreen());
-      ConectorBackend servidor = ConectorBackend(
-          ruta: '/buscar_objeto',
-          body: <String, String>{},
-          method: HttpMethod.post);
-      Get.find<LoadingController>()
-          .handleServerResponseSearchItem(await servidor.hacerRequest());
+  void iniciarBusqueda() async {
+    Get.off(() => const LoadingScreen());
+    Map<String, String> json = {};
+    String nombre = objeto!.nombre;
+    ConectorBackend servidor = ConectorBackend(
+        ruta: '/rna_test_flutter/$nombre/',
+        body: {'miArchivo' : codificarFotoEnBase64(imageFile!)},
+        method: HttpMethod.post);
+    Get.find<LoadingController>().handleServerResponseSearchItem(
+        await servidor.hacerRequest(), imageFile!, objeto!);
   }
 
   // Función para abrir la galería y seleccionar una foto

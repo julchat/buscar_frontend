@@ -13,11 +13,14 @@ class LoadingScreen extends GetView<LoadingController> {
       body: Obx(
         () => controller.isLoading.value
             ? const Center(
-                child: SpinKitFadingCircle(
-                  size: 250.0,
-                  color: Colors.yellow,
+                child: Tooltip(
+                  message: 'Cargando. Por favor espere',
+                  child: SpinKitFadingCircle(
+                    size: 250.0,
+                    color: Colors.yellow
                 ),
-              )
+              ),) 
+                
             : const SizedBox(),
       ),
     );

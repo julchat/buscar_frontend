@@ -1,10 +1,11 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:buscar_app/infrastructure/respuesta.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 
-import 'csrftoken_controller.dart';
+import 'csrftokenandsession_controller.dart';
 
 enum HttpMethod {
   get,
@@ -13,28 +14,30 @@ enum HttpMethod {
 }
 
 class ConectorBackend {
-  late Uri uri;
   final HttpMethod method;
-  final Map<String,String>? body;
+  late Uri uri;
+  final Map<String, String>? body;
 
   ConectorBackend({required ruta, required this.method, this.body}) {
-    uri = Uri.http('192.168.0.159:8000', ruta);
+    uri = Uri.http('192.168.0.200:8000', ruta);
   }
 
   Future<Respuesta> hacerRequest() async {
     Respuesta respuesta = Respuesta();
-    final csrfTokenController = Get.find<CsrfTokenController>();
-    String token = csrfTokenController.csrfToken.value;
+    final csrfTokenAndSessionController =
+        Get.find<CsrfTokenAndSessionController>();
+    String token = csrfTokenAndSessionController.csrfToken.value;
+    String session = csrfTokenAndSessionController.sessionId.value;
 
     Map<String, String>? headers = {
-      'X-CSRFToken': token,
       'csrftoken': token,
-      'Cookie' : 'csrftoken=$token'
+      'X-CSRFToken': token,
+      'Cookie': 'csrftoken=$token; sessionid=$session'
     };
-    if(body != null){
+    if (body != null) {
       body?["csrfmiddlewaretoken"] = token;
     }
-    
+
     try {
       switch (method) {
         case (HttpMethod.get):
@@ -46,14 +49,20 @@ class ConectorBackend {
           respuesta = Respuesta(
               respuestaExistente: await http
                   .post(uri, body: body, headers: headers)
-                  .timeout(const Duration(seconds: 40)));
+                  .timeout(const Duration(seconds: 200)));
         case (HttpMethod.delete):
           respuesta = Respuesta(
               respuestaExistente: await http
                   .delete(uri, body: body, headers: headers)
                   .timeout(const Duration(seconds: 40)));
       }
-      respuesta.finalizarOk();
+
+      if (respuesta.respuestaExistente!.statusCode >= 200 &&
+          respuesta.respuestaExistente!.statusCode < 400) {
+        respuesta.finalizarOk();
+      } else {
+        respuesta.finalizarMal();
+      }
     } on TimeoutException {
       respuesta.finalizarTimeOut();
     }
@@ -61,13 +70,13 @@ class ConectorBackend {
   }
 
   Future<void> getCsrfToken() async {
-    final response =  await http.get(uri).timeout(const Duration(seconds: 40));
+    final response = await http.get(uri).timeout(const Duration(seconds: 200));
 
     if (response.statusCode == 200) {
       final token =
           response.body; // Obtén el valor del token CSRF desde la respuesta
 
-      final csrfTokenController = Get.find<CsrfTokenController>();
+      final csrfTokenController = Get.find<CsrfTokenAndSessionController>();
       csrfTokenController.setCsrfToken(
           token); // Actualiza el valor del token en el controlador
     } else {

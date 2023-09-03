@@ -2,10 +2,12 @@ import 'package:buscar_app/domain/controllers/item_search_controller.dart';
 import 'package:buscar_app/domain/controllers/items_controller.dart';
 import 'package:buscar_app/domain/controllers/loading_controller.dart';
 import 'package:buscar_app/infrastructure/conector_backend.dart';
-import 'package:buscar_app/infrastructure/csrftoken_controller.dart';
+import 'package:buscar_app/infrastructure/csrftokenandsession_controller.dart';
 import 'package:buscar_app/presentation/screens/splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+
+import 'domain/controllers/item_create_controller.dart';
 
 void main() {
   runApp(const MyApp());
@@ -17,10 +19,11 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    Get.put(CsrfTokenController());
+    Get.put(CsrfTokenAndSessionController());
     Get.put(LoadingController());
     Get.put(ItemsController());
     Get.put(ItemSearchController());
+    Get.put(ItemCreateController());
     
     ConectorBackend(ruta: 'csrf_token/', method: HttpMethod.get).getCsrfToken();
     return GetMaterialApp(

@@ -1,10 +1,6 @@
 import 'package:http/http.dart';
 
-enum EstadoRespuesta {
-  enCurso,
-  finalizadaOk,
-  timeOut,
-}
+enum EstadoRespuesta { enCurso, finalizadaOk, timeOut, finalizadaMal }
 
 class Respuesta {
   Response? respuestaExistente;
@@ -21,5 +17,9 @@ class Respuesta {
 
   void finalizarTimeOut() {
     estado = EstadoRespuesta.timeOut;
+  }
+
+  void finalizarMal() {
+    estado = EstadoRespuesta.finalizadaMal;
   }
 }

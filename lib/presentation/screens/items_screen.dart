@@ -1,5 +1,7 @@
 import 'package:buscar_app/presentation/screens/home_screen.dart';
+import 'package:buscar_app/presentation/widgets/boton_custom.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:get/get.dart';
 
 import '../../domain/controllers/items_controller.dart';
@@ -12,6 +14,7 @@ class ItemsScreen extends GetView<ItemsController> {
 
   @override
   Widget build(BuildContext context) {
+    controller.conseguirObjetos();
     return Scaffold(
         appBar: AppBar(
           title: const Text('CATÁLOGO'),
@@ -31,7 +34,7 @@ class ItemsScreen extends GetView<ItemsController> {
               iconSize: 60,
               padding: const EdgeInsets.only(bottom: 10),
               onPressed: () {
-                // Aquí puedes poner la función que deseas que se ejecute cuando se presione el botón '+'
+                controller.agregarObjeto();
               },
               tooltip: 'Añadir objeto',
             ),
@@ -39,22 +42,71 @@ class ItemsScreen extends GetView<ItemsController> {
         ),
         body: SafeArea(
             child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 10),
-          child: Column(
-            children: [
-              Expanded(
-                  child: ListView.builder(
-                      itemCount: controller.itemsList.length,
-                      itemBuilder: ((context, index) {
-                        final Objeto objeto = controller.itemsList[index];
-                        return Column(children: [
-                          SizedBox(height: tamanioItems/2),
-                          SizedBox(
-                              height: tamanioItems, child: ObjetoEnLista(objeto: objeto, tamanioItems: tamanioItems, controller: controller))
-                        ]);
-                      })))
-            ],
-          ),
-        )));
+                padding: const EdgeInsets.symmetric(horizontal: 10),
+                child: Expanded(child: Obx(() {
+                  switch (controller.estadoPantalla.value) {
+                    case (EstadoPantalla.inicial):
+                      return const SizedBox();
+                    case (EstadoPantalla.carga):
+                      return dibujarCarga();
+                    case (EstadoPantalla.vacio):
+                      return dibujarVacio();
+                    case (EstadoPantalla.objetos):
+                      return dibujarObjetos();
+                    case (EstadoPantalla.error):
+                      return dibujarError();
+                  }
+                })))));
+  }
+
+  Widget dibujarCarga() {
+    return const Center(
+        child: Tooltip(
+      message: 'Cargando. Por favor espere',
+      child: SpinKitFadingCircle(size: 250.0, color: Colors.yellow),
+    ));
+  }
+
+  Widget dibujarVacio() {
+    return const Text(
+      'HA OCURRIDO UN ERROR \n\n POR FAVOR REINTENTE MÁS TARDE \n',
+      style: TextStyle(
+          color: Colors.yellow, fontSize: 40, fontWeight: FontWeight.w500),
+      textAlign: TextAlign.center,
+    );
+  }
+
+  Widget dibujarError() {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        const Text(
+          'HA OCURRIDO UN ERROR \n\n POR FAVOR REINTENTE MÁS TARDE \n',
+          style: TextStyle(
+              color: Colors.yellow, fontSize: 40, fontWeight: FontWeight.w500),
+          textAlign: TextAlign.center,
+        ),
+        BotonCustomSinIconoXL(
+            onPressed: () => (controller.conseguirObjetos()),
+            contenido: 'REINTENTAR')
+      ],
+    );
+  }
+
+  ListView dibujarObjetos() {
+    return ListView.builder(
+        itemCount: controller.itemsList.length,
+        itemBuilder: ((context, index) {
+          final Objeto objeto = controller.itemsList[index];
+          return Column(children: [
+            SizedBox(height: tamanioItems / 2),
+            SizedBox(
+                height: tamanioItems,
+                child: ObjetoEnLista(
+                    objeto: objeto,
+                    tamanioItems: tamanioItems,
+                    controller: controller))
+          ]);
+        }));
   }
 }
