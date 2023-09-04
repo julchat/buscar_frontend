@@ -9,7 +9,10 @@ class ObjetoEnLista extends StatelessWidget {
   final ItemsController controller;
 
   const ObjetoEnLista(
-      {super.key, required this.objeto, required this.tamanioItems, required this.controller});
+      {super.key,
+      required this.objeto,
+      required this.tamanioItems,
+      required this.controller});
 
   @override
   Widget build(BuildContext context) {
@@ -45,7 +48,11 @@ class ObjetoEnLista extends StatelessWidget {
             iconSize: tamanioItems * 2,
             icon: const Icon(Icons.search, color: Colors.yellow),
             onPressed: () {
-              controller.buscarObjeto(objeto);
+              if (objeto.detectable) {
+                controller.buscarObjeto(objeto);
+              } else {
+                controller.abrirSnackbar(objeto);
+              }
             },
           ),
         ),

@@ -1,7 +1,7 @@
 import 'package:buscar_app/presentation/widgets/boton_custom.dart';
 import 'package:flutter/material.dart';
 
-class FailureTemplate extends StatelessWidget {
+class NeutralTemplate extends StatelessWidget {
   final String textoDeResultado;
   final String textoDeBoton;
   final void Function() onPressed;
@@ -9,7 +9,7 @@ class FailureTemplate extends StatelessWidget {
   final void Function()? onPressedBoton2;
   final String? textoDeBoton3;
   final void Function()? onPressedBoton3;
-  const FailureTemplate({
+  const NeutralTemplate({
     super.key,
     required this.textoDeBoton,
     required this.textoDeResultado,
@@ -28,15 +28,8 @@ class FailureTemplate extends StatelessWidget {
                 padding: const EdgeInsets.all(20),
                 child: Center(
                     child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    const SizedBox(height: 20),
-                    const Tooltip(
-                      message: 'Atención',
-                      child:
-                      Icon(Icons.warning_amber_rounded,
-                            size: 300, color: Colors.yellow),
-                    ),
                     const SizedBox(height: 50),
                     Center(
                         child: Text(

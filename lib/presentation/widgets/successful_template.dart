@@ -23,7 +23,7 @@ class SuccessfulTemplate extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
         const SizedBox(height: 20),
-        const Icon(Icons.check, size: 300, color: Colors.yellow),
+        const Tooltip(message: 'Éxito', child: Icon(Icons.check, size: 300, color: Colors.yellow)),
         const SizedBox(height: 50),
         Center(child: Text(textoDeResultado, style: const TextStyle(color: Colors.yellow, fontSize: 40, fontWeight: FontWeight.w600), textAlign: TextAlign.center,)),
         const SizedBox(height: 50),

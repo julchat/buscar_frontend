@@ -68,11 +68,16 @@ class ItemsScreen extends GetView<ItemsController> {
   }
 
   Widget dibujarVacio() {
-    return const Text(
-      'HA OCURRIDO UN ERROR \n\n POR FAVOR REINTENTE MÁS TARDE \n',
-      style: TextStyle(
-          color: Colors.yellow, fontSize: 40, fontWeight: FontWeight.w500),
-      textAlign: TextAlign.center,
+    return const Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Text(
+          'NO HAY UN NINGÚN OBJETO \n\n AGREGUE SU PRIMER OBJETO DESDE EL BOTÓN DE "\+" \n',
+          style: TextStyle(
+              color: Colors.yellow, fontSize: 40, fontWeight: FontWeight.w500),
+          textAlign: TextAlign.center,
+        )
+      ],
     );
   }
 

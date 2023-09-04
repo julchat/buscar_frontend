@@ -1,7 +1,6 @@
 import 'package:buscar_app/domain/controllers/loading_controller.dart';
 import 'package:buscar_app/presentation/screens/loading_screen.dart';
 import 'package:get/get.dart';
-import 'package:http/http.dart';
 import 'package:image_picker/image_picker.dart';
 import '../../infrastructure/conector_backend.dart';
 import '../objeto.dart';
@@ -29,12 +28,13 @@ class ItemSearchController extends GetxController {
 
   void iniciarBusqueda() async {
     Get.off(() => const LoadingScreen());
-    Map<String, String> json = {};
     String nombre = objeto!.nombre;
+
     ConectorBackend servidor = ConectorBackend(
         ruta: '/rna_test_flutter/$nombre/',
-        body: {'miArchivo' : codificarFotoEnBase64(imageFile!)},
+        body: {'miArchivo': codificarFotoEnBase64(imageFile!)},
         method: HttpMethod.post);
+
     Get.find<LoadingController>().handleServerResponseSearchItem(
         await servidor.hacerRequest(), imageFile!, objeto!);
   }

@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:buscar_app/presentation/widgets/failure_template.dart';
 import 'package:get/get.dart';
@@ -9,8 +11,19 @@ class FailedLogin extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    String mensajeDeErrorAux;
+    String? mensajeMostrado;
+
+    if (mensajeDeError == null) {
+      mensajeMostrado = 'ALGO SALIÓ MAL';
+    } else {
+      mensajeDeErrorAux = mensajeDeError!;
+      final contenido = json.decode(mensajeDeErrorAux);
+      mensajeMostrado = contenido['usuario'];
+    }
+
     return FailureTemplate(
-        textoDeResultado: mensajeDeError ?? 'ALGO SALIÓ MAL',
+        textoDeResultado: mensajeMostrado ?? 'ALGO SALIÓ MAL',
         textoDeBoton: 'REGRESAR',
         onPressed: () => Get.off(() => const LoginScreen()));
   }

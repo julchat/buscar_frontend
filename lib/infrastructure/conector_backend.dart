@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:io';
 
 import 'package:buscar_app/infrastructure/respuesta.dart';
 import 'package:get/get.dart';
@@ -69,18 +68,24 @@ class ConectorBackend {
     return respuesta;
   }
 
-  Future<void> getCsrfToken() async {
-    final response = await http.get(uri).timeout(const Duration(seconds: 200));
+  Future<Respuesta> getCsrfToken() async {
+    Respuesta respuestaARetornar = Respuesta();
+    try{
+      respuestaARetornar = Respuesta(respuestaExistente: await http.get(uri).timeout(const Duration(seconds: 40)));
+      if (respuestaARetornar.respuestaExistente!.statusCode == 200) {
 
-    if (response.statusCode == 200) {
-      final token =
-          response.body; // Obtén el valor del token CSRF desde la respuesta
-
+      final token = respuestaARetornar.respuestaExistente!.body; // Obtén el valor del token CSRF desde la respuesta
       final csrfTokenController = Get.find<CsrfTokenAndSessionController>();
       csrfTokenController.setCsrfToken(
-          token); // Actualiza el valor del token en el controlador
-    } else {
-      throw Exception('Error al obtener el token CSRF');
+          token); // Ac
+      respuestaARetornar.finalizarOk();
+      } else{
+      respuestaARetornar.finalizarMal();
+      }
+    } on TimeoutException {
+      respuestaARetornar.finalizarTimeOut();
+    }
+    return respuestaARetornar;    
     }
   }
 
@@ -106,4 +111,4 @@ class ConectorBackend {
     }
     return respuesta;
   }*/
-}
+

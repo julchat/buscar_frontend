@@ -6,11 +6,15 @@ class CsrfTokenAndSessionController extends GetxController {
 
   void setCsrfToken(String token) {
     csrfToken.value = token;
-    print('nuevo token: $csrfToken');
+    print('nuevo token: $token');
   }
 
   void setSessionId(String session) {
     sessionId.value = session;
-    print('nueva sesion: $sessionId');
+    print('nuevo sesion: $session');
+  }
+
+  String getCsrfToken() {
+    return csrfToken.value;
   }
 }

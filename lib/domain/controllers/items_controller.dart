@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:buscar_app/presentation/screens/home_screen.dart';
 import 'package:get/get.dart';
 import '../../infrastructure/conector_backend.dart';
 import '../../infrastructure/respuesta.dart';
@@ -46,5 +45,11 @@ class ItemsController extends GetxController {
     } else {
       estadoPantalla.value = EstadoPantalla.error;
     }
+  }
+
+  void abrirSnackbar(Objeto objeto) {
+    Get.snackbar('No detectable', 'ESTE OBJETO TODAVÍA NO ESTÁ LISTO',
+    duration: const Duration(seconds: 4),
+    snackPosition: SnackPosition.BOTTOM);
   }
 }

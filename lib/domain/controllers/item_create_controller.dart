@@ -65,20 +65,20 @@ class CapturePhotosScreen extends GetView<ItemCreateController> {
           context: context,
           builder: (BuildContext context) {
             return AlertDialog(
-              title: Text('Salir de la Captura'),
-              content: Text('Realmente quieres salir? Perderás todos tus objetos.'),
+              title: const Text('Salir de la Captura'),
+              content: const Text('Realmente quieres salir? Perderás todos tus objetos.'),
               actions: [
                 TextButton(
                   onPressed: () {
                     Navigator.of(context).pop(false); // Continuar
                   },
-                  child: Text('CONTINUAR'),
+                  child: const Text('CONTINUAR'),
                 ),
                 TextButton(
                   onPressed: () {
                     Navigator.of(context).pop(true); // Salir
                   },
-                  child: Text('SALIR'),
+                  child: const Text('SALIR'),
                 ),
               ],
             );
@@ -87,7 +87,7 @@ class CapturePhotosScreen extends GetView<ItemCreateController> {
       },
       child: Scaffold(
         appBar: AppBar(
-          title: Text('CAPTURA DE FOTOS'),
+          title: const Text('CAPTURA DE FOTOS'),
         ),
         body: Column(
           children: [
@@ -102,10 +102,10 @@ class CapturePhotosScreen extends GetView<ItemCreateController> {
                         controller.stopCapture();
                         // Navegar a la siguiente etapa
                       },
-                      child: Text('CAPTURAR CON CÁMARA'),
+                      child: const Text('CAPTURAR CON CÁMARA'),
                     ),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     width: 50, // Ajustar el tamaño del espacio
                   ),
                   Expanded(
@@ -113,7 +113,7 @@ class CapturePhotosScreen extends GetView<ItemCreateController> {
                       onPressed: () {
                         controller.startCapture(); // Volver a capturar fotos
                       },
-                      child: Text('AGREGAR DE GALERÍA'),
+                      child: const Text('AGREGAR DE GALERÍA'),
                     ),
                   ),
                 ],
@@ -140,7 +140,7 @@ class CapturePhotosScreen extends GetView<ItemCreateController> {
               onPressed: () {
                 // Lógica para el tercer botón
               },
-              child: SizedBox(
+              child: const SizedBox(
                 width: double.infinity, // Ocupar el ancho de la columna
                 child: Center(
                   child: Text('CONTINUAR'),

@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:buscar_app/domain/controllers/search_result_controller.dart';
 import 'package:buscar_app/infrastructure/csrftokenandsession_controller.dart';
 import 'package:buscar_app/presentation/screens/home_screen.dart';
 import 'package:buscar_app/presentation/screens/login_screen.dart';
@@ -11,7 +12,6 @@ import 'package:buscar_app/presentation/screens/result_screens/failed_search.dar
 import 'package:buscar_app/presentation/screens/result_screens/successful_register.dart';
 import 'package:get/get.dart';
 import '../../infrastructure/respuesta.dart';
-import '../../presentation/screens/search_result_screen.dart';
 import '../objeto.dart';
 
 class LoadingController extends GetxController {
@@ -21,14 +21,12 @@ class LoadingController extends GetxController {
   void handleServerResponseRegister(Respuesta respuesta) {
     String? mensajeError;
 
-      if (respuesta.estado == EstadoRespuesta.finalizadaOk) {
-        Get.off(() => const SuccessfulRegister());
-      } 
-      else if(respuesta.estado == EstadoRespuesta.finalizadaMal){
-        mensajeError = respuesta.respuestaExistente?.body;
-        Get.off(FailedRegister(mensajeDeError: mensajeError));
-      }
-    else {
+    if (respuesta.estado == EstadoRespuesta.finalizadaOk) {
+      Get.off(() => const SuccessfulRegister());
+    } else if (respuesta.estado == EstadoRespuesta.finalizadaMal) {
+      mensajeError = respuesta.respuestaExistente?.body;
+      Get.off(FailedRegister(mensajeDeError: mensajeError));
+    } else {
       mensajeError = 'Hubo un problema de conexión';
       Get.off(FailedRegister(mensajeDeError: mensajeError));
     }
@@ -38,18 +36,16 @@ class LoadingController extends GetxController {
     String? mensajeError;
 
     if (respuesta.estado == EstadoRespuesta.finalizadaOk) {
-        final body = json.decode(respuesta.respuestaExistente!.body);
-        final String token = body['token'];
-        final String session = body['session'];
-        csrfTokenAndSessionController.setCsrfToken(token);
-        csrfTokenAndSessionController.setSessionId(session);
-        Get.off(() => const HomeScreen());
-      } 
-    else if(respuesta.estado == EstadoRespuesta.finalizadaMal) {
-        mensajeError = respuesta.respuestaExistente?.body;
-        Get.off(() => FailedLogin(mensajeDeError: mensajeError));
-    }
-    else {
+      final body = json.decode(respuesta.respuestaExistente!.body);
+      final String token = body['token'];
+      final String session = body['session'];
+      csrfTokenAndSessionController.setCsrfToken(token);
+      csrfTokenAndSessionController.setSessionId(session);
+      Get.off(() => const HomeScreen());
+    } else if (respuesta.estado == EstadoRespuesta.finalizadaMal) {
+      mensajeError = respuesta.respuestaExistente?.body;
+      Get.off(() => FailedLogin(mensajeDeError: mensajeError));
+    } else {
       mensajeError = 'HUBO UN PROBLEMA DE CONEXIÓN';
       Get.off(() => FailedLogin(mensajeDeError: mensajeError));
     }
@@ -59,13 +55,12 @@ class LoadingController extends GetxController {
     String? mensajeError;
 
     if (respuesta.estado == EstadoRespuesta.finalizadaOk) {
-        csrfTokenAndSessionController.setSessionId("");
-        Get.off(() => const LoginScreen());
-      } else if(respuesta.estado == EstadoRespuesta.finalizadaMal) {
-        mensajeError = respuesta.respuestaExistente?.body;
-        Get.off(() => FailedLogout(mensajeDeError: mensajeError));
-      }
-    else {
+      csrfTokenAndSessionController.setSessionId("");
+      Get.off(() => const LoginScreen());
+    } else if (respuesta.estado == EstadoRespuesta.finalizadaMal) {
+      mensajeError = respuesta.respuestaExistente?.body;
+      Get.off(() => FailedLogout(mensajeDeError: mensajeError));
+    } else {
       mensajeError = 'HUBO UN PROBLEMA DE CONEXIÓN';
       Get.off(() => FailedLogout(mensajeDeError: mensajeError));
     }
@@ -76,13 +71,11 @@ class LoadingController extends GetxController {
     String? mensajeError;
 
     if (respuesta.estado == EstadoRespuesta.finalizadaOk) {
-        Get.off(() => (SearchResultScreen(
-            respuesta: respuesta, foto: foto, objeto: objeto)));
-      } else if (respuesta.estado == EstadoRespuesta.finalizadaMal) {
-        mensajeError = respuesta.respuestaExistente?.body;
-        Get.off(() => const FailedSearch());
-      }
-    else if(respuesta.estado == EstadoRespuesta.timeOut) {
+      Get.find<SearchResultController>().procesarRespuesta(respuesta, foto, objeto);
+    } else if (respuesta.estado == EstadoRespuesta.finalizadaMal) {
+      mensajeError = respuesta.respuestaExistente?.body;
+      Get.off(() => FailedSearch(mensajeDeError: mensajeError));
+    } else if (respuesta.estado == EstadoRespuesta.timeOut) {
       Get.off(() =>
           const FailedSearch(mensajeDeError: 'HUBO UN PROBLEMA DE CONEXIÓN'));
     }

@@ -1,10 +1,32 @@
 import 'package:flutter/material.dart';
-import 'package:get/route_manager.dart';
-import 'dart:async';
+import 'package:get/get.dart';
 
-import 'login_screen.dart';
+import '../../domain/controllers/splash_controller.dart';
 
-class SplashScreen extends StatefulWidget {
+class SplashScreen extends GetView<SplashController> {
+  const SplashScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    controller.fetchCsrfToken();
+    return Scaffold(
+      backgroundColor: Colors.black,
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            // Coloca aquí tu logo de la aplicación
+            Image.asset(
+              'assets/images/logobuscAR.png', // Ruta de la imagen de tu logo
+            )
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+/* class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
 
   @override
@@ -41,4 +63,4 @@ class _SplashScreenState extends State<SplashScreen> {
       ),
     );
   }
-}
+} */

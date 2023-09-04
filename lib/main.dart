@@ -1,7 +1,8 @@
 import 'package:buscar_app/domain/controllers/item_search_controller.dart';
 import 'package:buscar_app/domain/controllers/items_controller.dart';
 import 'package:buscar_app/domain/controllers/loading_controller.dart';
-import 'package:buscar_app/infrastructure/conector_backend.dart';
+import 'package:buscar_app/domain/controllers/search_result_controller.dart';
+import 'package:buscar_app/domain/controllers/splash_controller.dart';
 import 'package:buscar_app/infrastructure/csrftokenandsession_controller.dart';
 import 'package:buscar_app/presentation/screens/splash_screen.dart';
 import 'package:flutter/material.dart';
@@ -24,8 +25,9 @@ class MyApp extends StatelessWidget {
     Get.put(ItemsController());
     Get.put(ItemSearchController());
     Get.put(ItemCreateController());
-    
-    ConectorBackend(ruta: 'csrf_token/', method: HttpMethod.get).getCsrfToken();
+    Get.put(SearchResultController());
+    Get.put(SplashController());
+
     return GetMaterialApp(
         title: 'buscAR',
         debugShowCheckedModeBanner: false,
