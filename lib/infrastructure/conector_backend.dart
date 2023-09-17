@@ -18,7 +18,7 @@ class ConectorBackend {
   final Map<String, String>? body;
 
   ConectorBackend({required ruta, required this.method, this.body}) {
-    uri = Uri.http('192.168.0.200:8000', ruta);
+    uri = Uri.http('192.168.0.159:8000', ruta);
   }
 
   Future<Respuesta> hacerRequest() async {

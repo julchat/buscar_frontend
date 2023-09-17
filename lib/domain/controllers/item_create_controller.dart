@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:buscar_app/domain/controllers/item_test.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
@@ -9,10 +10,12 @@ class ItemCreateController extends GetxController {
   final RxList<String> capturedPhotos = <String>[].obs;
   final RxBool isCapturing = false.obs;
 
-    Future<void> startCapture2() async {
-      final pickedPhotos = await ImagePicker().pickMultiImage();
-      pickedPhotos.forEach((element) {capturedPhotos.add(element.path);});
-    }
+  Future<void> startCapture2() async {
+    final pickedPhotos = await ImagePicker().pickMultiImage();
+    pickedPhotos.forEach((element) {
+      capturedPhotos.add(element.path);
+    });
+  }
 
   Future<void> startCapture() async {
     isCapturing.value = true;
@@ -66,7 +69,8 @@ class CapturePhotosScreen extends GetView<ItemCreateController> {
           builder: (BuildContext context) {
             return AlertDialog(
               title: const Text('Salir de la Captura'),
-              content: const Text('Realmente quieres salir? Perderás todos tus objetos.'),
+              content: const Text(
+                  'Realmente quieres salir? Perderás todos tus fotos tomadas.'),
               actions: [
                 TextButton(
                   onPressed: () {
@@ -119,7 +123,6 @@ class CapturePhotosScreen extends GetView<ItemCreateController> {
                 ],
               ),
             ),
-            
             Expanded(
               child: Obx(
                 () => ListView.builder(
@@ -128,7 +131,8 @@ class CapturePhotosScreen extends GetView<ItemCreateController> {
                     final imagePath = controller.capturedPhotos[index];
                     return GestureDetector(
                       onTap: () {
-                        controller.removePhoto(imagePath); // Eliminar foto al presionarla
+                        controller.removePhoto(
+                            imagePath); // Eliminar foto al presionarla
                       },
                       child: Image.file(File(imagePath)),
                     );
@@ -138,7 +142,10 @@ class CapturePhotosScreen extends GetView<ItemCreateController> {
             ),
             ElevatedButton(
               onPressed: () {
-                // Lógica para el tercer botón
+                Get.find<BindObjectsController>().setearFotos(controller.capturedPhotos.value);
+                Get.to(() => BindObjectsScreen());
+                // image:
+                //   Image.file(archivo)));
               },
               child: const SizedBox(
                 width: double.infinity, // Ocupar el ancho de la columna
@@ -147,15 +154,12 @@ class CapturePhotosScreen extends GetView<ItemCreateController> {
                 ),
               ),
             ),
-            
           ],
         ),
       ),
     );
   }
 }
-
-
 
 class FotoEnLista extends StatelessWidget {
   final Image imagen;

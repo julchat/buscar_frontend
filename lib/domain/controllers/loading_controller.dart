@@ -69,9 +69,11 @@ class LoadingController extends GetxController {
   void handleServerResponseSearchItem(
       Respuesta respuesta, File foto, Objeto objeto) {
     String? mensajeError;
+    print(foto.path.split('/').last);
 
     if (respuesta.estado == EstadoRespuesta.finalizadaOk) {
-      Get.find<SearchResultController>().procesarRespuesta(respuesta, foto, objeto);
+      Get.find<SearchResultController>()
+          .procesarRespuesta(respuesta, foto, objeto);
     } else if (respuesta.estado == EstadoRespuesta.finalizadaMal) {
       mensajeError = respuesta.respuestaExistente?.body;
       Get.off(() => FailedSearch(mensajeDeError: mensajeError));
