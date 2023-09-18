@@ -1,19 +1,40 @@
 import 'dart:io';
 
-import 'package:buscar_app/domain/controllers/item_test.dart';
+import 'package:buscar_app/domain/controllers/bind_objects_controller.dart';
+import 'package:buscar_app/presentation/screens/items_screen.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
+import '../../presentation/screens/bind_objects_screen.dart';
+
 class ItemCreateController extends GetxController {
-  final RxList<String> capturedPhotos = <String>[].obs;
+  final RxList<File> capturedPhotos = <File>[].obs;
   final RxBool isCapturing = false.obs;
+  final BindObjectsController proxPaso = Get.find<BindObjectsController>();
+
+  void addCapturedPhoto(String path) {
+    final File imageToAdd = File(path);
+    capturedPhotos.add(imageToAdd);
+    proxPaso.agregarFoto(Image.file(imageToAdd));
+  }
+
+  // Método para eliminar una foto de la lista
+  void removePhoto(File image, int index) {
+    capturedPhotos.remove(image);
+    proxPaso.quitarFoto(index);
+  }
+
+  void deletePhotos() {
+    capturedPhotos.value = <File>[];
+    proxPaso.resetState();
+  }
 
   Future<void> startCapture2() async {
     final pickedPhotos = await ImagePicker().pickMultiImage();
     pickedPhotos.forEach((element) {
-      capturedPhotos.add(element.path);
+      addCapturedPhoto(element.path);
     });
   }
 
@@ -26,7 +47,7 @@ class ItemCreateController extends GetxController {
       if (pickedFile == null) {
         stopCapture(); // Detener captura si el usuario cancela
       } else {
-        capturedPhotos.add(pickedFile.path);
+        addCapturedPhoto(pickedFile.path);
       }
       // Agregar solo si pickedFile no es nulo
     }
@@ -36,10 +57,6 @@ class ItemCreateController extends GetxController {
     isCapturing.value = false;
   }
 
-  void deletePhotos() {
-    capturedPhotos.value = <String>[];
-  }
-
   void readInstructions() async {
     FlutterTts tts = FlutterTts();
     await tts.setLanguage('es');
@@ -47,11 +64,6 @@ class ItemCreateController extends GetxController {
       await tts.speak('Presione el botón de atrás para finalizar las capturas');
       await Future.delayed(const Duration(seconds: 10));
     }
-  }
-
-  // Método para eliminar una foto de la lista
-  void removePhoto(String imagePath) {
-    capturedPhotos.remove(imagePath);
   }
 }
 
@@ -68,9 +80,9 @@ class CapturePhotosScreen extends GetView<ItemCreateController> {
           context: context,
           builder: (BuildContext context) {
             return AlertDialog(
-              title: const Text('Salir de la Captura'),
+              title: const Text('SALIR DE LA CAPTURA'),
               content: const Text(
-                  'Realmente quieres salir? Perderás todos tus fotos tomadas.'),
+                  '¿REALMENTE QUIERES SALIR? \n PERDERÁS TODAS TUS CAPTURAS'),
               actions: [
                 TextButton(
                   onPressed: () {
@@ -80,6 +92,9 @@ class CapturePhotosScreen extends GetView<ItemCreateController> {
                 ),
                 TextButton(
                   onPressed: () {
+                    controller.stopCapture();
+                    controller.deletePhotos();
+
                     Navigator.of(context).pop(true); // Salir
                   },
                   child: const Text('SALIR'),
@@ -91,7 +106,17 @@ class CapturePhotosScreen extends GetView<ItemCreateController> {
       },
       child: Scaffold(
         appBar: AppBar(
-          title: const Text('CAPTURA DE FOTOS'),
+          title: const Text('CATÁLOGO'),
+          centerTitle: true,
+          leading: IconButton(
+            padding: const EdgeInsets.only(bottom: 1, left: 5),
+            icon: const Icon(Icons.arrow_back),
+            iconSize: 55,
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            tooltip: 'Volver hacia el catálogo',
+          ),
         ),
         body: Column(
           children: [
@@ -103,7 +128,7 @@ class CapturePhotosScreen extends GetView<ItemCreateController> {
                   Expanded(
                     child: ElevatedButton(
                       onPressed: () {
-                        controller.stopCapture();
+                        controller.startCapture();
                         // Navegar a la siguiente etapa
                       },
                       child: const Text('CAPTURAR CON CÁMARA'),
@@ -115,7 +140,7 @@ class CapturePhotosScreen extends GetView<ItemCreateController> {
                   Expanded(
                     child: ElevatedButton(
                       onPressed: () {
-                        controller.startCapture(); // Volver a capturar fotos
+                        controller.startCapture2(); // Volver a capturar fotos
                       },
                       child: const Text('AGREGAR DE GALERÍA'),
                     ),
@@ -128,13 +153,13 @@ class CapturePhotosScreen extends GetView<ItemCreateController> {
                 () => ListView.builder(
                   itemCount: controller.capturedPhotos.length,
                   itemBuilder: (context, index) {
-                    final imagePath = controller.capturedPhotos[index];
+                    final image = controller.capturedPhotos[index];
                     return GestureDetector(
                       onTap: () {
                         controller.removePhoto(
-                            imagePath); // Eliminar foto al presionarla
+                            image, index); // Eliminar foto al presionarla
                       },
-                      child: Image.file(File(imagePath)),
+                      child: Image.file(image),
                     );
                   },
                 ),
@@ -142,8 +167,7 @@ class CapturePhotosScreen extends GetView<ItemCreateController> {
             ),
             ElevatedButton(
               onPressed: () {
-                Get.find<BindObjectsController>().setearFotos(controller.capturedPhotos.value);
-                Get.to(() => BindObjectsScreen());
+                Get.to(() => const BindObjectsScreen());
                 // image:
                 //   Image.file(archivo)));
               },

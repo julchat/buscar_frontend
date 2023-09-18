@@ -1,5 +1,5 @@
 import 'package:buscar_app/domain/controllers/item_search_controller.dart';
-import 'package:buscar_app/domain/controllers/item_test.dart';
+import 'package:buscar_app/domain/controllers/bind_objects_controller.dart';
 import 'package:buscar_app/domain/controllers/items_controller.dart';
 import 'package:buscar_app/domain/controllers/loading_controller.dart';
 import 'package:buscar_app/domain/controllers/search_result_controller.dart';
@@ -25,10 +25,10 @@ class MyApp extends StatelessWidget {
     Get.put(LoadingController());
     Get.put(ItemsController());
     Get.put(ItemSearchController());
+    Get.put(BindObjectsController());
     Get.put(ItemCreateController());
     Get.put(SearchResultController());
     Get.put(SplashController());
-    Get.put(BindObjectsController());
     return GetMaterialApp(
         title: 'buscAR',
         debugShowCheckedModeBanner: false,

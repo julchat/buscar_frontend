@@ -22,7 +22,6 @@ class ItemsController extends GetxController {
   void agregarObjeto() {
     ItemCreateController creadorItems = Get.find<ItemCreateController>();
     creadorItems.deletePhotos();
-    creadorItems.startCapture2();
     Get.to(() => const CapturePhotosScreen());
   }
 
