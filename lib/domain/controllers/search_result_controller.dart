@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
 import 'package:buscar_app/infrastructure/respuesta.dart';
-import 'package:buscar_app/presentation/screens/search_result_screen.dart';
+import 'package:buscar_app/presentation/screens/result_screens/search_result_screen.dart';
 import 'package:get/get.dart';
 import 'package:image/image.dart' as img;
 

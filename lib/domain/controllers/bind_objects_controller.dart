@@ -1,33 +1,26 @@
+import 'dart:io';
 import 'dart:math';
 
+import 'package:buscar_app/domain/controllers/object_confirmation_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class Punto {
-  double coordenadaX;
-  double coordenadaY;
-
-  Punto({required this.coordenadaX, required this.coordenadaY});
-}
-
-class ParVertices {
-  Punto verticeViejo;
-  Punto verticeNuevo;
-
-  ParVertices({Punto? verticeViejo, Punto? verticeNuevo})
-      : verticeViejo = verticeViejo ?? Punto(coordenadaX: -1, coordenadaY: -1),
-        verticeNuevo = verticeNuevo ?? Punto(coordenadaX: -1, coordenadaY: -1);
-}
+import '../../presentation/screens/object_confirmation_screen.dart';
+import '../punto_y_vertices.dart';
 
 class BindObjectsController extends GetxController {
   List<Image> listaDeFotos = [];
   List<ParVertices> listaDePuntos = [];
+  List<File> listaDeFotosArch = [];
   late Rx<Image> fotoActual;
   late Rx<ParVertices> puntosActuales;
   Rx<EdgeInsets> margin = const EdgeInsets.all(0).obs;
   Rx<double> boxWidth = (0.0).obs;
   Rx<double> boxHeight = (0.0).obs;
   int indiceActual = 0;
+  var isUltimaFoto = false.obs;
+
+  List<String> nombresUsados = [];
 
   @override
   void onInit() {
@@ -44,6 +37,8 @@ class BindObjectsController extends GetxController {
   void resetState() {
     listaDeFotos.clear();
     listaDePuntos.clear();
+    listaDeFotosArch.clear();
+    isUltimaFoto(false);
     fotoActual(Image.asset('assets/images/buscartransparente.png'));
     puntosActuales(
       ParVertices(),
@@ -56,9 +51,19 @@ class BindObjectsController extends GetxController {
 
   void siguienteFoto() {
     if (indiceActual < listaDeFotos.length - 1) {
+  
       listaDePuntos[indiceActual] = puntosActuales.value;
       indiceActual++;
+      if(indiceActual == listaDeFotos.length) {
+        isUltimaFoto(true);
+      }
       cargarContenido();
+    } else {
+      ObjectConfirmationController proxPaso =
+          Get.find<ObjectConfirmationController>();
+      proxPaso.inicializar(
+          listaDeFotos, listaDePuntos, nombresUsados, listaDeFotosArch);
+      Get.to(() => const ObjectConfirmationScreen());
     }
   }
 
@@ -105,9 +110,10 @@ class BindObjectsController extends GetxController {
     }
   }
 
-  void agregarFoto(Image imageToAdd) {
-    listaDeFotos.add(imageToAdd);
+  void agregarFoto(File imageToAdd) {
+    listaDeFotos.add(Image.file(imageToAdd));
     listaDePuntos.add(ParVertices());
+    listaDeFotosArch.add(imageToAdd);
 
     if (listaDeFotos.length == 1) {
       indiceActual = 0;
@@ -118,6 +124,7 @@ class BindObjectsController extends GetxController {
   void quitarFoto(int index) {
     listaDeFotos.removeAt(index);
     listaDePuntos.removeAt(index);
+    listaDeFotosArch.removeAt(index);
     if ((indiceActual < index) || (indiceActual == index && index != 0)) {
       indiceActual--;
     }
@@ -134,6 +141,8 @@ class BindObjectsController extends GetxController {
     puntosActuales(ParVertices());
     armarCaja();
   }
+
+  void setNombresUsados(List<String> nombresUsados) {
+    this.nombresUsados = nombresUsados;
+  }
 }
-
-

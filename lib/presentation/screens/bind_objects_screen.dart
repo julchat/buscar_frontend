@@ -1,3 +1,4 @@
+import "package:buscar_app/presentation/widgets/boton_custom.dart";
 import "package:flutter/material.dart";
 import "package:get/get.dart";
 import "../../domain/controllers/bind_objects_controller.dart";
@@ -9,13 +10,16 @@ class BindObjectsScreen extends GetView<BindObjectsController> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("DELIMITAR OBJETO", textAlign: TextAlign.center),
-        leading: IconButton(
+                title: const Text('CONFIRMAR OBJETO'),
+        centerTitle: true,
+          leading: IconButton(
+          padding: const EdgeInsets.only(bottom: 1, left: 5),
           icon: const Icon(Icons.arrow_back),
+          iconSize: 55,
           onPressed: () {
-            // Navegar hacia atrás
+            Get.back();
           },
-        ),
+        tooltip: 'Volver hacia delimitación de fotos'),
         actions: [
           IconButton(
             icon: const Icon(Icons.help),
@@ -27,11 +31,12 @@ class BindObjectsScreen extends GetView<BindObjectsController> {
       ),
       body: Column(
         children: [
-          ElevatedButton(
+          const SizedBox(height: 90),
+          BotonCustomSinIcono(
             onPressed: () {
               controller.reiniciarMarco();
             },
-            child: const Text("REINICIAR MARCO"),
+            contenido: 'REINICIAR MARCO',
           ),
           Expanded(
             child: GestureDetector(
@@ -73,20 +78,21 @@ class BindObjectsScreen extends GetView<BindObjectsController> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              ElevatedButton(
+              BotonCustomSinIcono(
                 onPressed: () {
                   controller.anteriorFoto();
                 },
-                child: const Text("ANTERIOR"),
+                contenido: ("ANTERIOR"),
               ),
-              ElevatedButton(
+              BotonCustomSinIcono(
                 onPressed: () {
                   controller.siguienteFoto();
                 },
-                child: const Text("SIGUIENTE"),
+                contenido : ("SIGUIENTE")
               ),
             ],
           ),
+          const SizedBox(height: 80)
         ],
       ),
     );

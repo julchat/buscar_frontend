@@ -1,5 +1,7 @@
 import 'package:buscar_app/domain/controllers/items_controller.dart';
+import 'package:buscar_app/presentation/screens/items_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 import '../../domain/objeto.dart';
 
@@ -62,7 +64,54 @@ class ObjetoEnLista extends StatelessWidget {
             icon: const Icon(Icons.delete, color: Colors.yellow),
             iconSize: tamanioItems * 2,
             onPressed: () {
-              // Agrega la lógica para eliminar el objeto
+              showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return AlertDialog(
+                    title: const Text("ELIMINAR OBJETO",
+                        style: TextStyle(fontSize: 20)),
+                    contentPadding:
+                        const EdgeInsets.symmetric(horizontal: 30.0),
+                    content: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: <Widget>[
+                          Container(
+                            width: 500,
+                            height: 500,
+                            child: Image(image: objeto.foto),
+                            // Aquí puedes agregar la imagen dentro del Container.
+                          ),
+                          const SizedBox(height: 4),
+                          Text("¿DESEA ELIMINAR ${objeto.nombre}?",
+                              style: const TextStyle(fontSize: 20)),
+                          const SizedBox(height: 10)
+                        ]),
+                    actions: <Widget>[
+                      ButtonBar(
+                        alignment: MainAxisAlignment.spaceEvenly,
+                        children: <Widget>[
+                          TextButton(
+                            onPressed: () {
+                              // Cerrar el diálogo.
+                              Navigator.of(context).pop();
+                            },
+                            child: const Text("CANCELAR",
+                                style: TextStyle(fontSize: 20)),
+                          ),
+                          TextButton(
+                            onPressed: () {
+                              Get.off(() => const ItemsScreen());
+                              Navigator.of(context).pop();
+                            },
+                            child: const Text("CONFIRMAR",
+                                style: TextStyle(fontSize: 20)),
+                          ),
+                        ],
+                      ),
+                    ],
+                  );
+                },
+              );
             },
           ),
         ),

@@ -5,9 +5,9 @@ import 'package:buscar_app/presentation/widgets/neutral_template.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../../domain/controllers/item_search_controller.dart';
-import '../../domain/objeto.dart';
-import 'items_screen.dart';
+import '../../../domain/controllers/item_search_controller.dart';
+import '../../../domain/objeto.dart';
+import '../items_screen.dart';
 
 class SearchResultScreen extends GetView<SearchResultController> {
   final Ubicacion ubicacion;
