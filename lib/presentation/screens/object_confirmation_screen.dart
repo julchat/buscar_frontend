@@ -1,5 +1,3 @@
-import 'package:buscar_app/domain/controllers/loading_controller.dart';
-import 'package:buscar_app/presentation/screens/loading_screen.dart';
 import 'package:buscar_app/presentation/widgets/boton_custom.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';

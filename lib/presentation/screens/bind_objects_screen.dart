@@ -2,6 +2,7 @@ import "package:buscar_app/presentation/widgets/boton_custom.dart";
 import "package:flutter/material.dart";
 import "package:get/get.dart";
 import "../../domain/controllers/bind_objects_controller.dart";
+import 'package:flutter_tts/flutter_tts.dart';
 
 class BindObjectsScreen extends GetView<BindObjectsController> {
   const BindObjectsScreen({super.key});
@@ -10,22 +11,27 @@ class BindObjectsScreen extends GetView<BindObjectsController> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-                title: const Text('CONFIRMAR OBJETO'),
+        title: const Text('CONFIRMAR OBJETO'),
         centerTitle: true,
-          leading: IconButton(
-          padding: const EdgeInsets.only(bottom: 1, left: 5),
-          icon: const Icon(Icons.arrow_back),
-          iconSize: 55,
-          onPressed: () {
-            Get.back();
-          },
-        tooltip: 'Volver hacia delimitación de fotos'),
+        leading: IconButton(
+            padding: const EdgeInsets.only(bottom: 1, left: 5),
+            icon: const Icon(Icons.arrow_back),
+            iconSize: 55,
+            onPressed: () {
+              Get.back();
+            },
+            tooltip: 'Volver hacia delimitación de fotos'),
         actions: [
           IconButton(
             icon: const Icon(Icons.help),
             onPressed: () {
-              // Mostrar ventana modal de ayuda
+              var tts = FlutterTts();
+              tts.setLanguage('es');
+              tts.speak(
+                  'Oprima en dos ubicaciones de la foto para marcar donde se encuentra el objeto en la foto. Utilizando los botones de anterior y siguiente, se podrá desplazar por cada una de las fotos. Podrá reiniciar el rectángulo de un punto con el botón de Reiniciar Marco.');
             },
+            tooltip:
+                'Oprima en dos ubicaciones de la foto para marcar donde se encuentra el objeto en la foto. Utilizando los botones de anterior y siguiente, se podrá desplazar por cada una de las fotos. Podrá reiniciar el rectángulo de un punto con el botón de Reiniciar Marco.',
           ),
         ],
       ),
@@ -85,11 +91,10 @@ class BindObjectsScreen extends GetView<BindObjectsController> {
                 contenido: ("ANTERIOR"),
               ),
               BotonCustomSinIcono(
-                onPressed: () {
-                  controller.siguienteFoto();
-                },
-                contenido : ("SIGUIENTE")
-              ),
+                  onPressed: () {
+                    controller.siguienteFoto();
+                  },
+                  contenido: ("SIGUIENTE")),
             ],
           ),
           const SizedBox(height: 80)

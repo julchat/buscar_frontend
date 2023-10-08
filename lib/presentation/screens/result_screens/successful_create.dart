@@ -3,8 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:buscar_app/presentation/widgets/successful_template.dart';
 import 'package:get/get.dart';
 
-import '../login_screen.dart';
-
 class SuccessfulCreate extends StatelessWidget {
   const SuccessfulCreate({super.key});
 

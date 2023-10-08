@@ -3,10 +3,7 @@ import 'dart:io';
 import 'package:buscar_app/domain/controllers/bind_objects_controller.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 import 'package:get/get.dart';
-import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-
-import '../../presentation/screens/bind_objects_screen.dart';
 
 class ItemCreateController extends GetxController {
   final RxList<File> capturedPhotos = <File>[].obs;
