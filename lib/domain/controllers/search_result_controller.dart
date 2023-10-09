@@ -67,7 +67,7 @@ class SearchResultController extends GetxController {
     } else if (body['encontrado'] == 'True') {
       DimensionFoto dimensiones = await getImageDimensions(foto);
       DimensionRectangulo rectangulo =
-          DimensionRectangulo.fromJson(ubicaciones: body['ubicaciones']);
+          DimensionRectangulo.fromJson(ubicaciones: body['ubicaciones'], accuraccy: body['precision']);
       double centroX = (rectangulo.xmin + rectangulo.xmax) / 2;
       double centroY = (rectangulo.ymin + rectangulo.ymax) / 2;
 

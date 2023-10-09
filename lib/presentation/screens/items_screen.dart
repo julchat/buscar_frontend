@@ -40,10 +40,9 @@ class ItemsScreen extends GetView<ItemsController> {
             ),
           ],
         ),
-        body: SafeArea(
-            child: Padding(
+        body: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 10),
-                child: Expanded(child: Obx(() {
+                child:  Obx(() {
                   switch (controller.estadoPantalla.value) {
                     case (EstadoPantalla.inicial):
                       return const SizedBox();
@@ -56,7 +55,7 @@ class ItemsScreen extends GetView<ItemsController> {
                     case (EstadoPantalla.error):
                       return dibujarError();
                   }
-                })))));
+                })));
   }
 
   Widget dibujarCarga() {

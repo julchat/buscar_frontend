@@ -18,7 +18,8 @@ class ConectorBackend {
   final Map<String, String>? body;
 
   ConectorBackend({required ruta, required this.method, this.body}) {
-    uri = Uri.http('192.168.0.159:8000', ruta);
+    //uri = Uri.http('192.168.0.159:8000', ruta);
+    uri = Uri.http('buscarg454.eastus.cloudapp.azure.com:8000', ruta);
   }
 
   Future<Respuesta> hacerRequest() async {
@@ -70,24 +71,25 @@ class ConectorBackend {
 
   Future<Respuesta> getCsrfToken() async {
     Respuesta respuestaARetornar = Respuesta();
-    try{
-      respuestaARetornar = Respuesta(respuestaExistente: await http.get(uri).timeout(const Duration(seconds: 40)));
+    try {
+      respuestaARetornar = Respuesta(
+          respuestaExistente:
+              await http.get(uri).timeout(const Duration(seconds: 40)));
       if (respuestaARetornar.respuestaExistente!.statusCode == 200) {
-
-      final token = respuestaARetornar.respuestaExistente!.body; // Obtén el valor del token CSRF desde la respuesta
-      final csrfTokenController = Get.find<CsrfTokenAndSessionController>();
-      csrfTokenController.setCsrfToken(
-          token); // Ac
-      respuestaARetornar.finalizarOk();
-      } else{
-      respuestaARetornar.finalizarMal();
+        final token = respuestaARetornar.respuestaExistente!
+            .body; // Obtén el valor del token CSRF desde la respuesta
+        final csrfTokenController = Get.find<CsrfTokenAndSessionController>();
+        csrfTokenController.setCsrfToken(token); // Ac
+        respuestaARetornar.finalizarOk();
+      } else {
+        respuestaARetornar.finalizarMal();
       }
     } on TimeoutException {
       respuestaARetornar.finalizarTimeOut();
     }
-    return respuestaARetornar;    
-    }
+    return respuestaARetornar;
   }
+}
 
   /* enviarMensajeSincronico() async {
     try {
