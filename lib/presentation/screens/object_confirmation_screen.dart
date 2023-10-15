@@ -4,6 +4,9 @@ import 'package:get/get.dart';
 
 import '../../domain/controllers/object_confirmation_controller.dart';
 import '../widgets/custom_text_form_field.dart';
+import 'package:flutter_tts/flutter_tts.dart';
+
+import 'loading_screen.dart';
 
 class ObjectConfirmationScreen extends GetView<ObjectConfirmationController> {
   const ObjectConfirmationScreen({super.key});
@@ -33,8 +36,8 @@ class ObjectConfirmationScreen extends GetView<ObjectConfirmationController> {
               const SizedBox(height: 50),
               Container(
                   alignment: Alignment.center,
-                  width: 400,
-                  height: 400,
+                  width: 340,
+                  height: 340,
                   decoration: BoxDecoration(
                     border: Border.all(
                       color: const Color.fromARGB(
@@ -71,9 +74,17 @@ class ObjectConfirmationScreen extends GetView<ObjectConfirmationController> {
               const SizedBox(height: 100),
               BotonCustomSinIconoXL(
                   onPressed: () {
-                    if (!controller.nombreNoValido() &&
-                        !controller.nombreUsado()) {
-                      controller.crearObjeto();
+                    FlutterTts tts = FlutterTts();
+                    tts.setLanguage('es');
+                    if (!controller.nombreNoValido()) {
+                      if (!controller.nombreUsado()) {
+                        controller.crearObjeto();
+                      } else {
+                        tts.speak('Ya tienes un objeto con ese nombre');
+                      }
+                    } else {
+                      tts.speak(
+                          'El nombre del objeto debe contener al menos 3 caracteres');
                     }
                   },
                   contenido: 'AÑADIR OBJETO')

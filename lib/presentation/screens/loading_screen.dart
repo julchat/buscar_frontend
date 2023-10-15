@@ -9,20 +9,12 @@ class LoadingScreen extends GetView<LoadingController> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Obx(
-        () => controller.isLoading.value
-            ? const Center(
-                child: Tooltip(
-                  message: 'Cargando. Por favor espere',
-                  child: SpinKitFadingCircle(
-                    size: 250.0,
-                    color: Colors.yellow
-                ),
-              ),) 
-                
-            : const SizedBox(),
+    return const Scaffold(
+        body: Center(
+      child: Tooltip(
+        message: 'Cargando. Por favor espere',
+        child: SpinKitFadingCircle(size: 250.0, color: Colors.yellow),
       ),
-    );
+    ));
   }
 }

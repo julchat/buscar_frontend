@@ -71,7 +71,7 @@ class ItemsScreen extends GetView<ItemsController> {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Text(
-          'NO HAY UN NINGÚN OBJETO \n\n AGREGUE SU PRIMER OBJETO DESDE EL BOTÓN DE "+" \n',
+          'NO HAY NINGÚN OBJETO \n\n AGREGUE SU PRIMER OBJETO DESDE EL BOTÓN DE "+" \n',
           style: TextStyle(
               color: Colors.yellow, fontSize: 40, fontWeight: FontWeight.w500),
           textAlign: TextAlign.center,

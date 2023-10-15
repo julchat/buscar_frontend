@@ -10,6 +10,7 @@ import '../../domain/objeto.dart';
 import '../../infrastructure/respuesta.dart';
 import '../screens/loading_screen.dart';
 import '../screens/object_gallery_screen.dart';
+import 'package:auto_size_text/auto_size_text.dart';
 
 class ObjetoEnLista extends StatelessWidget {
   final Objeto objeto;
@@ -33,8 +34,8 @@ class ObjetoEnLista extends StatelessWidget {
               verFotos();
             },
             child: Container(
-                width: tamanioItems,
-                height: tamanioItems,
+                width: tamanioItems * 0.8,
+                height: tamanioItems * 0.8,
                 decoration: BoxDecoration(
                   border: Border.all(color: Colors.yellow, width: 4),
                 ),
@@ -50,7 +51,7 @@ class ObjetoEnLista extends StatelessWidget {
               verFotos();
             },
             
-              child: Text(
+              child: AutoSizeText(
                 objeto.nombre,
                 style:
                     TextStyle(color: Colors.yellow, fontSize: tamanioItems / 3),
@@ -62,7 +63,7 @@ class ObjetoEnLista extends StatelessWidget {
         FittedBox(
           fit: BoxFit.contain,
           child: IconButton(
-            iconSize: tamanioItems * 2,
+            iconSize: tamanioItems * 0.7,
             icon: const Icon(Icons.search, color: Colors.yellow),
             onPressed: () {
               if (objeto.detectable) {
@@ -77,7 +78,7 @@ class ObjetoEnLista extends StatelessWidget {
           fit: BoxFit.contain,
           child: IconButton(
             icon: const Icon(Icons.delete, color: Colors.yellow),
-            iconSize: tamanioItems * 2,
+            iconSize: tamanioItems * 0.7,
             onPressed: () {
               showDialog(
                 context: context,
@@ -153,7 +154,8 @@ class ObjetoEnLista extends StatelessWidget {
   }
 
   void abrirSnackbar(String titulo, String body) {
-    Get.snackbar(titulo, body,
+    
+    SnackbarController snackbar = Get.snackbar(titulo, body,
         colorText: Colors.black,
         backgroundColor: Colors.cyan,
         messageText: Text(body,

@@ -20,9 +20,9 @@ class ObjectConfirmationController extends GetxController {
 
   Rx<String> nombreObjeto = "".obs;
   List<File> archivosEnEnvio = [];
-
+  Future<Directory> appDirectorio = getApplicationDocumentsDirectory();
   void inicializar(List<Image> listaDeFotos, List<ParVertices> listaDePuntos,
-      List<String> nombresUsados, List<File> listaDeFotosArch) {
+      List<String> nombresUsados, List<File> listaDeFotosArch) async {
     this.listaDePuntos = listaDePuntos;
     if (listaDeFotos.isNotEmpty) {
       primeraImagen = listaDeFotos.first;
@@ -43,32 +43,35 @@ class ObjectConfirmationController extends GetxController {
   }
 
   void crearObjeto() async {
+    Get.offAll(() => const LoadingScreen());
+    Directory appDirectory = await appDirectorio;
     File imagen;
     for (int i = 0; i < listaDeFotosArch.length; i++) {
       imagen = listaDeFotosArch.elementAt(i);
+      print("foto $i agarrada");
 
       var newFileName = '${nombreObjeto.value}$i';
       var newFileNameJPEG = '$newFileName.jpeg';
       var newFileNameXML = '$newFileName.xml';
-      final appDirectory = await getApplicationDocumentsDirectory();
       var newPathJPEG = '${appDirectory.path}/$newFileNameJPEG';
       var newPathXML = '${appDirectory.path}/$newFileNameXML';
 
       File imagenRenombrada = imagen.copySync(newPathJPEG);
-
+      print("foto $i copiada");
       File imagenMetadata =
           armarXML(imagenRenombrada, newPathXML, newFileNameJPEG, newPathJPEG);
 
       archivosEnEnvio.add(imagenRenombrada);
       archivosEnEnvio.add(imagenMetadata);
-      enviarArchivos();
+      
+      
     }
+    print(archivosEnEnvio.length);
+    enviarArchivos();
   }
 
   void enviarArchivos() async {
     //Map<File, Future<Respuesta>> respuestasF = {};
-    print(archivosEnEnvio.length);
-    Get.offAll(() => const LoadingScreen());
     Map<File, Respuesta> respuestas = {};
 
     for (File archivo in archivosEnEnvio) {

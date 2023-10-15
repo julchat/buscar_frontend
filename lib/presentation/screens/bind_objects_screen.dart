@@ -37,13 +37,14 @@ class BindObjectsScreen extends GetView<BindObjectsController> {
       ),
       body: Column(
         children: [
-          const SizedBox(height: 90),
+          const SizedBox(height: 65),
           BotonCustomSinIcono(
             onPressed: () {
               controller.reiniciarMarco();
             },
             contenido: 'REINICIAR MARCO',
           ),
+          const SizedBox(height: 25),
           Expanded(
             child: GestureDetector(
               onTapDown: (details) {
@@ -81,6 +82,7 @@ class BindObjectsScreen extends GetView<BindObjectsController> {
               ),
             ),
           ),
+          const SizedBox(height: 25),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
@@ -97,7 +99,7 @@ class BindObjectsScreen extends GetView<BindObjectsController> {
                   contenido: ("SIGUIENTE")),
             ],
           ),
-          const SizedBox(height: 80)
+          const SizedBox(height: 55)
         ],
       ),
     );

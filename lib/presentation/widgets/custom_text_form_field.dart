@@ -31,6 +31,7 @@ class CustomTextFormField extends StatelessWidget {
       onChanged: onChanged,
       validator: validator,
       obscureText: obscureText,
+      autovalidateMode: AutovalidateMode.always,
       style: TextStyle(fontSize: 20, color: colors.tertiary),
       decoration: InputDecoration(
         enabledBorder: border.copyWith(

@@ -60,7 +60,7 @@ class LoadingController extends GetxController {
 
     if (respuesta.estado == EstadoRespuesta.finalizadaOk) {
       csrfTokenAndSessionController.setSessionId("");
-      Get.off(() => const LoginScreen());
+      Get.offAll(() => const LoginScreen());
     } else if (respuesta.estado == EstadoRespuesta.finalizadaMal) {
       mensajeError = respuesta.respuestaExistente?.body;
       Get.off(() => FailedLogout(mensajeDeError: mensajeError));

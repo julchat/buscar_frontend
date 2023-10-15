@@ -28,9 +28,11 @@ environment:
 # the latest version available on pub.dev. To see which dependencies have newer
 # versions available, run `flutter pub outdated`.
 dependencies:
+  auto_size_text: ^3.0.0
   cupertino_icons: ^1.0.2
   flutter:
     sdk: flutter
+  flutter_launcher_icons: ^0.13.1
   flutter_signature_pad: ^3.0.1
   flutter_spinkit: ^5.2.0
   flutter_tts: ^3.7.0
@@ -43,11 +45,12 @@ dependencies:
   xml: ^6.3.0
 
 dev_dependencies:
-  flutter_launcher_icons: "^0.13.1"
+  flutter_launcher_icons: ^0.13.1
   flutter_lints: ^2.0.0
   flutter_native_splash: ^2.0.1+1
   flutter_test:
     sdk: flutter
+  rename: ^3.0.0
 
 flutter_native_splash:
   color: "#000000"
@@ -56,8 +59,8 @@ flutter_native_splash:
 flutter_launcher_icons:
   android: "launcher_icon"
   ios: true
+  adaptive_icon_background: "#000000"
   image_path: assets/images/logopequenio.png
-
 flutter:
 
   # The following line ensures that the Material Icons font is
@@ -67,6 +70,7 @@ flutter:
   assets:
     - assets/images/logobuscAR.png
     - assets/images/buscartransparente.png
+    - assets/images/logopequenio.png
   # To add assets to your application, add an assets section, like this:
   # assets:
   #   - images/a_dot_burr.jpeg
