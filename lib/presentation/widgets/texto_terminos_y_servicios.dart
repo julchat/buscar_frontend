@@ -28,7 +28,7 @@ class PrivacyPolicyLinkAndTermsOfService extends StatelessWidget{
                     content: const Column(
                         children: [
                           Padding(
-                          padding: const EdgeInsets.only(bottom: 10.0),
+                          padding: EdgeInsets.only(bottom: 10.0),
                           child: Text(
                             '1. Aceptación de los Términos y Condiciones',
                             style: TextStyle(fontWeight: FontWeight.bold),
@@ -39,7 +39,7 @@ class PrivacyPolicyLinkAndTermsOfService extends StatelessWidget{
                         ),
                         SizedBox(height: 20.0),
                         Padding(
-                          padding: const EdgeInsets.only(bottom: 10.0),
+                          padding: EdgeInsets.only(bottom: 10.0),
                           child: Text(
                             '2. Registro de Cuenta',
                             style: TextStyle(fontWeight: FontWeight.bold),
@@ -50,7 +50,7 @@ class PrivacyPolicyLinkAndTermsOfService extends StatelessWidget{
                         ),
                         SizedBox(height: 20.0),
                         Padding(
-                          padding: const EdgeInsets.only(bottom: 10.0),
+                          padding: EdgeInsets.only(bottom: 10.0),
                           child: Text(
                             '3. Uso del Servicio',
                             style: TextStyle(fontWeight: FontWeight.bold),
@@ -64,7 +64,7 @@ class PrivacyPolicyLinkAndTermsOfService extends StatelessWidget{
                         ),
                         SizedBox(height: 20.0),
                         Padding(
-                          padding: const EdgeInsets.only(bottom: 10.0),
+                          padding: EdgeInsets.only(bottom: 10.0),
                           child: Text(
                             '4. Propiedad Intelectual',
                             style: TextStyle(fontWeight: FontWeight.bold),

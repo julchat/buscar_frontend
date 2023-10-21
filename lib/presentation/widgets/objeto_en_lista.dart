@@ -30,39 +30,46 @@ class ObjetoEnLista extends StatelessWidget {
       children: [
         SizedBox(width: tamanioItems * 0.20),
         GestureDetector(
-            onTap: () {
-              verFotos();
-            },
-            child: Container(
-                width: tamanioItems * 0.8,
-                height: tamanioItems * 0.8,
-                decoration: BoxDecoration(
-                  border: Border.all(color: Colors.yellow, width: 4),
-                ),
-                child: Image(
-                  alignment: Alignment.center,
-                  image: objeto.foto,
-                  fit: BoxFit.cover,
-                ))),
+              onTap: () {
+                verFotos();
+              },
+              child: Semantics(
+              button: true,
+              tooltip: 'Imagen de ${objeto.nombre}. Presione para ver fotos',
+              child: Container(
+                  width: tamanioItems * 0.8,
+                  height: tamanioItems * 0.8,
+                  decoration: BoxDecoration(
+                    border: Border.all(color: Colors.yellow, width: 4),
+                  ),
+                  child: Image(
+                    alignment: Alignment.center,
+                    image: objeto.foto,
+                    fit: BoxFit.cover,
+                  ))),
+        ),
         SizedBox(width: tamanioItems * 0.2),
-        Expanded(child: 
-        GestureDetector(
-            onTap: () {
-              verFotos();
-            },
-            
-              child: AutoSizeText(
-                objeto.nombre,
-                style:
-                    TextStyle(color: Colors.yellow, fontSize: tamanioItems / 3),
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-              ),
-            )),
+        Expanded(
+          child: Tooltip(
+              message: 'Presione para ver fotos',
+              child: GestureDetector(
+                onTap: () {
+                  verFotos();
+                },
+                child: AutoSizeText(
+                  objeto.nombre,
+                  style: TextStyle(
+                      color: Colors.yellow, fontSize: tamanioItems / 3),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              )),
+        ),
         SizedBox(width: tamanioItems * 0.1),
         FittedBox(
           fit: BoxFit.contain,
           child: IconButton(
+            tooltip: 'Buscar objeto ${objeto.nombre}',
             iconSize: tamanioItems * 0.7,
             icon: const Icon(Icons.search, color: Colors.yellow),
             onPressed: () {
@@ -77,6 +84,7 @@ class ObjetoEnLista extends StatelessWidget {
         FittedBox(
           fit: BoxFit.contain,
           child: IconButton(
+            tooltip: 'Eliminar objeto ${objeto.nombre}',
             icon: const Icon(Icons.delete, color: Colors.yellow),
             iconSize: tamanioItems * 0.7,
             onPressed: () {
@@ -154,14 +162,16 @@ class ObjetoEnLista extends StatelessWidget {
   }
 
   void abrirSnackbar(String titulo, String body) {
-    
-    SnackbarController snackbar = Get.snackbar(titulo, body,
+   Get.snackbar(titulo, body,
         colorText: Colors.black,
         backgroundColor: Colors.cyan,
-        messageText: Text(body,
+        messageText: 
+        Semantics(
+          liveRegion: true,
+          child: Text(body,
             style: const TextStyle(
-                fontWeight: FontWeight.w500, color: Colors.black)),
-        duration: const Duration(seconds: 10),
+                fontWeight: FontWeight.w500, color: Colors.black))),
+        duration: const Duration(seconds: 6),
         snackPosition: SnackPosition.BOTTOM);
   }
 
@@ -171,7 +181,7 @@ class ObjetoEnLista extends StatelessWidget {
             ruta: 'mostrar_objeto_flutter/${objeto.nombre}/',
             method: HttpMethod.get)
         .hacerRequest();
-        
+
     if (respuesta.estado == EstadoRespuesta.finalizadaOk) {
       final jsonData = json.decode(respuesta.respuestaExistente!.body);
       List<String> fotosPuras = List<String>.from(jsonData['fotos']);
@@ -179,7 +189,7 @@ class ObjetoEnLista extends StatelessWidget {
       for (String foto in fotosPuras) {
         fotosProcesadas.add(MemoryImage(base64Decode(foto)));
       }
-      
+
       Get.off(ObjectGalleryScreen(
           fotos: fotosProcesadas, nombreObjeto: objeto.nombre));
     } else {

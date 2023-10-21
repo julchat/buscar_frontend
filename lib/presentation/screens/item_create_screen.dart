@@ -93,20 +93,29 @@ class CapturePhotosScreen extends GetView<ItemCreateController> {
                   //physics: const PageScrollPhysics(),
                   itemCount: controller.capturedPhotos.length,
                   itemBuilder: (context, index) {
+                    final indexmasuno = index + 1;
                     final image = controller.capturedPhotos[index];
-                    return GestureDetector(
-                        onTap: () {
-                          controller.removePhoto(
-                              image, index); // Eliminar foto al presionarla
-                        },
-                        child: Image.file(image));
+                    return Tooltip(
+                        message:
+                            'Imagen número $indexmasuno. Oprima para eliminar',
+                        child: GestureDetector(
+                            onTap: () {
+                              controller.removePhoto(
+                                  image, index); // Eliminar foto al presionarla
+                            },
+                            child: Image.file(image)));
                   },
                 ),
               ),
             ),
             ElevatedButton(
               onPressed: () {
-                Get.to(() => const BindObjectsScreen());
+                if (controller.capturedPhotos.length >= 5) {
+                  Get.to(() => const BindObjectsScreen());
+                } else {
+                  abrirSnackbar(
+                      'FALTAN FOTOS', 'DEBEN HABER AL MENOS CINCO FOTOS');
+                }
                 // image:
                 //   Image.file(archivo)));
               },
@@ -125,6 +134,19 @@ class CapturePhotosScreen extends GetView<ItemCreateController> {
         ),
       ),
     );
+  }
+
+  void abrirSnackbar(String titulo, String body) {
+    Get.snackbar(titulo, body,
+        colorText: Colors.black,
+        backgroundColor: Colors.cyan,
+        messageText: Semantics(
+            liveRegion: true,
+            child: Text(body,
+                style: const TextStyle(
+                    fontWeight: FontWeight.w500, color: Colors.black))),
+        duration: const Duration(seconds: 6),
+        snackPosition: SnackPosition.BOTTOM);
   }
 }
 
@@ -154,7 +176,7 @@ class AlertaObjetos extends StatelessWidget {
             controller.deletePhotos();
 
             Navigator.of(context).pop(true);
-            if(flecha){
+            if (flecha) {
               Navigator.of(context).pop(true);
             } // Salir
           },

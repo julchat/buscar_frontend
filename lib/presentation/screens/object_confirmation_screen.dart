@@ -6,8 +6,6 @@ import '../../domain/controllers/object_confirmation_controller.dart';
 import '../widgets/custom_text_form_field.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 
-import 'loading_screen.dart';
-
 class ObjectConfirmationScreen extends GetView<ObjectConfirmationController> {
   const ObjectConfirmationScreen({super.key});
 
@@ -80,16 +78,30 @@ class ObjectConfirmationScreen extends GetView<ObjectConfirmationController> {
                       if (!controller.nombreUsado()) {
                         controller.crearObjeto();
                       } else {
-                        tts.speak('Ya tienes un objeto con ese nombre');
+                        abrirSnackbar('OBJETO YA EXISTENTE',
+                            'YA TIENES UN OBJETO CON ESE NOMBRE');
                       }
                     } else {
-                      tts.speak(
-                          'El nombre del objeto debe contener al menos 3 caracteres');
+                      abrirSnackbar('NOMBRE DEMASIADO CORTO',
+                          'EL NOMBRE DEBE CONTENER AL MENOS 3 CARACTERES');
                     }
                   },
                   contenido: 'AÑADIR OBJETO')
             ],
           ))),
     );
+  }
+
+  void abrirSnackbar(String titulo, String body) {
+      Get.snackbar(titulo, body,
+        colorText: Colors.black,
+        backgroundColor: Colors.cyan,
+        messageText: Semantics(
+            liveRegion: true,
+            child: Text(body,
+                style: const TextStyle(
+                    fontWeight: FontWeight.w500, color: Colors.black))),
+        duration: const Duration(seconds: 6),
+        snackPosition: SnackPosition.BOTTOM);
   }
 }

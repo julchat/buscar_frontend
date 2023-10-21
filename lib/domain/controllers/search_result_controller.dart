@@ -73,12 +73,12 @@ class SearchResultController extends GetxController {
 
       Ubicacion ubicacionEncontrado = Ubicacion.error;
 
-      if (dimensiones.alto * 0.33 > centroY && dimensiones.ancho * 0.5 > centroX)ubicacionEncontrado = Ubicacion.inferiorIzquierda;
-      if (dimensiones.alto * 0.33 > centroY && dimensiones.ancho * 0.5 <= centroX) ubicacionEncontrado = Ubicacion.inferiorDerecha;
+      if (dimensiones.alto * 0.33 > centroY && dimensiones.ancho * 0.5 > centroX)ubicacionEncontrado = Ubicacion.superiorIzquierda;
+      if (dimensiones.alto * 0.33 > centroY && dimensiones.ancho * 0.5 <= centroX) ubicacionEncontrado = Ubicacion.superiorDerecha;
       if (dimensiones.alto * 0.33 <= centroY && dimensiones.alto * 0.66 > centroY && dimensiones.ancho * 0.5 > centroX) ubicacionEncontrado = Ubicacion.centroIzquierda;
       if (dimensiones.alto * 0.33 <= centroY && dimensiones.alto * 0.66 > centroY && dimensiones.ancho * 0.5 <= centroX) ubicacionEncontrado = Ubicacion.centroDerecha;
-      if (dimensiones.alto * 0.66 <= centroY && dimensiones.ancho * 0.5 > centroX) ubicacionEncontrado = Ubicacion.superiorIzquierda;
-      if (dimensiones.alto * 0.66 <= centroY && dimensiones.ancho * 0.5 <= centroX) ubicacionEncontrado = Ubicacion.superiorDerecha;
+      if (dimensiones.alto * 0.66 <= centroY && dimensiones.ancho * 0.5 > centroX) ubicacionEncontrado = Ubicacion.inferiorIzquierda;
+      if (dimensiones.alto * 0.66 <= centroY && dimensiones.ancho * 0.5 <= centroX) ubicacionEncontrado = Ubicacion.inferiorDerecha;
 
       return UbicacionConPrecision(
           ubicacion: ubicacionEncontrado, precision: rectangulo.precision);

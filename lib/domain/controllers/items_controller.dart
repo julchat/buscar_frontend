@@ -59,8 +59,12 @@ class ItemsController extends GetxController {
     Get.snackbar('No detectable', 'ESTE OBJETO TODAVÍA NO ESTÁ LISTO',
     colorText: Colors.black,
     backgroundColor: Colors.cyan,
-    messageText: const Text('ESTE OBJETO TODAVÍA NO ESTÁ LISTO', style: TextStyle(fontWeight: FontWeight.w500, color: Colors.black)),
-        duration: const Duration(seconds: 10),
+    messageText: 
+    Semantics(
+          liveRegion: true,
+          child: const Text('ESTE OBJETO TODAVÍA NO ESTÁ LISTO', style: TextStyle(fontWeight: FontWeight.w500, color: Colors.black))
+    ),
+        duration: const Duration(seconds: 6),
         snackPosition: SnackPosition.BOTTOM);
   }
 }
