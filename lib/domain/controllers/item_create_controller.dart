@@ -5,11 +5,12 @@ import 'package:flutter_tts/flutter_tts.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 
+import '../../presentation/screens/bind_objects_screen.dart';
+
 class ItemCreateController extends GetxController {
   final RxList<File> capturedPhotos = <File>[].obs;
   final RxBool isCapturing = false.obs;
   final BindObjectsController proxPaso = Get.find<BindObjectsController>();
-
 
   void addCapturedPhoto(String path) {
     final File imageToAdd = File(path);
@@ -23,6 +24,11 @@ class ItemCreateController extends GetxController {
     proxPaso.quitarFoto(index);
   }
 
+  void irAProxPaso() {
+    proxPaso.volverAPrincipio();
+    Get.to(() => const BindObjectsScreen());
+  }
+
   void deletePhotos() {
     capturedPhotos.value = <File>[];
     proxPaso.resetState();
@@ -30,7 +36,7 @@ class ItemCreateController extends GetxController {
 
   Future<void> startCapture2() async {
     final pickedPhotos = await ImagePicker().pickMultiImage();
-    for(XFile element in pickedPhotos) {
+    for (XFile element in pickedPhotos) {
       addCapturedPhoto(element.path);
     }
   }
@@ -67,4 +73,3 @@ class ItemCreateController extends GetxController {
     proxPaso.setNombresUsados(nombresUsados);
   }
 }
-

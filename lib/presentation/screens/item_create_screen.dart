@@ -95,9 +95,10 @@ class CapturePhotosScreen extends GetView<ItemCreateController> {
                   itemBuilder: (context, index) {
                     final indexmasuno = index + 1;
                     final image = controller.capturedPhotos[index];
-                    return Tooltip(
-                        message:
-                            'Imagen número $indexmasuno. Oprima para eliminar',
+                    return Semantics(
+                        label: 'Imagen $indexmasuno',
+                        tooltip: 'Oprima para eliminar' ,
+                        button: true,
                         child: GestureDetector(
                             onTap: () {
                               controller.removePhoto(
@@ -111,7 +112,7 @@ class CapturePhotosScreen extends GetView<ItemCreateController> {
             ElevatedButton(
               onPressed: () {
                 if (controller.capturedPhotos.length >= 5) {
-                  Get.to(() => const BindObjectsScreen());
+                  controller.irAProxPaso();
                 } else {
                   abrirSnackbar(
                       'FALTAN FOTOS', 'DEBEN HABER AL MENOS CINCO FOTOS');

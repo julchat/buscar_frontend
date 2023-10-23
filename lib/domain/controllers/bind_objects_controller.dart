@@ -51,10 +51,9 @@ class BindObjectsController extends GetxController {
 
   void siguienteFoto() {
     if (indiceActual < listaDeFotos.length - 1) {
-  
       listaDePuntos[indiceActual] = puntosActuales.value;
       indiceActual++;
-      if(indiceActual == listaDeFotos.length) {
+      if (indiceActual == listaDeFotos.length) {
         isUltimaFoto(true);
       }
       cargarContenido();
@@ -73,6 +72,12 @@ class BindObjectsController extends GetxController {
       indiceActual--;
       cargarContenido();
     }
+  }
+
+  void volverAPrincipio() {
+    listaDePuntos[indiceActual] = puntosActuales.value;
+    indiceActual = 0;
+    cargarContenido();
   }
 
   void agregarPunto(double x, double y) {

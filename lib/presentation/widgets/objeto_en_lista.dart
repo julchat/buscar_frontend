@@ -34,14 +34,17 @@ class ObjetoEnLista extends StatelessWidget {
                 verFotos();
               },
               child: Semantics(
+              image: true,
               button: true,
-              tooltip: 'Imagen de ${objeto.nombre}. Presione para ver fotos',
+              label: 'Imagen de ${objeto.nombre}',
+              tooltip: 'Presione para ver fotos',
               child: Container(
                   width: tamanioItems * 0.8,
                   height: tamanioItems * 0.8,
                   decoration: BoxDecoration(
                     border: Border.all(color: Colors.yellow, width: 4),
                   ),
+
                   child: Image(
                     alignment: Alignment.center,
                     image: objeto.foto,
@@ -50,8 +53,9 @@ class ObjetoEnLista extends StatelessWidget {
         ),
         SizedBox(width: tamanioItems * 0.2),
         Expanded(
-          child: Tooltip(
-              message: 'Presione para ver fotos',
+          child: Semantics(
+              button: true,
+              tooltip: 'Presione para ver fotos',
               child: GestureDetector(
                 onTap: () {
                   verFotos();
@@ -63,8 +67,8 @@ class ObjetoEnLista extends StatelessWidget {
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                 ),
+                ),
               )),
-        ),
         SizedBox(width: tamanioItems * 0.1),
         FittedBox(
           fit: BoxFit.contain,

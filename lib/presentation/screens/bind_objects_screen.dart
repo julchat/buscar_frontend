@@ -11,7 +11,7 @@ class BindObjectsScreen extends GetView<BindObjectsController> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('CONFIRMAR OBJETO'),
+        title: const Text('DELIMITAR OBJETO'),
         centerTitle: true,
         leading: IconButton(
             padding: const EdgeInsets.only(bottom: 1, left: 5),
@@ -52,6 +52,10 @@ class BindObjectsScreen extends GetView<BindObjectsController> {
                 double y = details.localPosition.dy;
                 controller.agregarPunto(x, y);
               },
+              child: Semantics(
+                button: false,
+                label: 'Imagen número ${controller.indiceActual+1}',
+                tooltip: 'Para delimitar el objeto en la foto, deberá primero desactivar el lector de pantalla',
               child: Container(
                 color: Colors
                     .transparent, // Cambia a color.transparent si quieres que el Container sea invisible
@@ -81,6 +85,7 @@ class BindObjectsScreen extends GetView<BindObjectsController> {
                 ),
               ),
             ),
+          ),
           ),
           const SizedBox(height: 25),
           Row(
