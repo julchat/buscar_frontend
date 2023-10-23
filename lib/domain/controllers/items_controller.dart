@@ -32,6 +32,17 @@ class ItemsController extends GetxController {
     creadorItems.deletePhotos();
     creadorItems.setNombresUsados(nombresUsados);
     Get.to(() => const CapturePhotosScreen());
+    Get.dialog(AlertDialog(
+        title: const Text('ATENCIÓN'),
+        content: const Text(
+            'PARA PODER AGREGAR UN NUEVO OBJETO, REQUERIRÁ DE UNA PERSONA QUE LA ASISTA EN EL PROCESO'),
+        actions: [
+          TextButton(
+              onPressed: () {
+                Get.back(); // Continuar
+              },
+              child: const Center(child: Text('DE ACUERDO', style: TextStyle(fontSize: 20))))
+        ]));
   }
 
   void conseguirObjetos() async {
@@ -57,13 +68,13 @@ class ItemsController extends GetxController {
 
   void abrirSnackbar(Objeto objeto) {
     Get.snackbar('No detectable', 'ESTE OBJETO TODAVÍA NO ESTÁ LISTO',
-    colorText: Colors.black,
-    backgroundColor: Colors.cyan,
-    messageText: 
-    Semantics(
-          liveRegion: true,
-          child: const Text('ESTE OBJETO TODAVÍA NO ESTÁ LISTO', style: TextStyle(fontWeight: FontWeight.w500, color: Colors.black))
-    ),
+        colorText: Colors.black,
+        backgroundColor: Colors.cyan,
+        messageText: Semantics(
+            liveRegion: true,
+            child: const Text('ESTE OBJETO TODAVÍA NO ESTÁ LISTO',
+                style: TextStyle(
+                    fontWeight: FontWeight.w500, color: Colors.black))),
         duration: const Duration(seconds: 6),
         snackPosition: SnackPosition.BOTTOM);
   }
