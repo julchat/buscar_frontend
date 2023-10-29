@@ -45,8 +45,10 @@ class BindObjectsScreen extends GetView<BindObjectsController> {
             contenido: 'REINICIAR MARCO',
           ),
           const SizedBox(height: 25),
-          Expanded(
-            child: GestureDetector(
+          Expanded(child: LayoutBuilder(builder: (context, constraints) {
+            controller.setAnchoExpanded(constraints.maxWidth);
+            controller.setAltoExpanded(constraints.maxHeight);
+            return GestureDetector(
               onTapDown: (details) {
                 double x = details.localPosition.dx;
                 double y = details.localPosition.dy;
@@ -54,11 +56,9 @@ class BindObjectsScreen extends GetView<BindObjectsController> {
               },
               child: Semantics(
                 button: false,
-                label: 'Imagen número ${controller.indiceActual+1}',
-                tooltip: 'Para delimitar el objeto en la foto, deberá primero desactivar el lector de pantalla',
-              child: Container(
-                color: Colors
-                    .transparent, // Cambia a color.transparent si quieres que el Container sea invisible
+                label: 'Imagen número ${controller.indiceActual + 1}',
+                tooltip:
+                    'Para delimitar el objeto en la foto, deberá primero desactivar el lector de pantalla',
                 child: Stack(
                   alignment: AlignmentDirectional.center,
                   children: [
@@ -76,7 +76,7 @@ class BindObjectsScreen extends GetView<BindObjectsController> {
                           width: controller.boxWidth.value,
                           height: controller.boxHeight.value,
                           decoration: BoxDecoration(
-                            border: Border.all(color: Colors.red, width: 2),
+                            border: Border.all(color: Colors.red, width: 3),
                           ),
                         ),
                       );
@@ -84,9 +84,8 @@ class BindObjectsScreen extends GetView<BindObjectsController> {
                   ],
                 ),
               ),
-            ),
-          ),
-          ),
+            );
+          })),
           const SizedBox(height: 25),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,

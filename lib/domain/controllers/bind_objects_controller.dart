@@ -1,3 +1,4 @@
+import 'dart:ffi';
 import 'dart:io';
 import 'dart:math';
 
@@ -7,6 +8,7 @@ import 'package:get/get.dart';
 
 import '../../presentation/screens/object_confirmation_screen.dart';
 import '../punto_y_vertices.dart';
+import 'package:image/image.dart' as img;
 
 class BindObjectsController extends GetxController {
   List<Image> listaDeFotos = [];
@@ -19,7 +21,9 @@ class BindObjectsController extends GetxController {
   Rx<double> boxHeight = (0.0).obs;
   int indiceActual = 0;
   var isUltimaFoto = false.obs;
-
+  double expandedWidth = 0.0;
+  double expandedHeight = 0.0;
+  List<(int, int)> listaDeDimensionesFotos = [];
   List<String> nombresUsados = [];
 
   @override
@@ -38,6 +42,9 @@ class BindObjectsController extends GetxController {
     listaDeFotos.clear();
     listaDePuntos.clear();
     listaDeFotosArch.clear();
+    listaDeDimensionesFotos.clear();
+    expandedWidth = 0.0;
+    expandedHeight = 0.0;
     isUltimaFoto(false);
     fotoActual(Image.asset('assets/images/buscartransparente.png'));
     puntosActuales(
@@ -60,8 +67,9 @@ class BindObjectsController extends GetxController {
     } else {
       ObjectConfirmationController proxPaso =
           Get.find<ObjectConfirmationController>();
+      List<VerticesProcesados> vertices = traducirPuntos();
       proxPaso.inicializar(
-          listaDeFotos, listaDePuntos, nombresUsados, listaDeFotosArch);
+          listaDeFotos.first, vertices, nombresUsados, listaDeFotosArch);
       Get.to(() => const ObjectConfirmationScreen());
     }
   }
@@ -90,6 +98,8 @@ class BindObjectsController extends GetxController {
 
   void armarCaja() {
     final nuevosPuntos = puntosActuales.value;
+    print(
+        'Caja a armar en: (${nuevosPuntos.verticeViejo.coordenadaX};${nuevosPuntos.verticeViejo.coordenadaY}) , (${nuevosPuntos.verticeNuevo.coordenadaX};${nuevosPuntos.verticeNuevo.coordenadaY})');
     if (nuevosPuntos.verticeViejo.coordenadaX != -1) {
       margin(EdgeInsets.fromLTRB(
         min(nuevosPuntos.verticeViejo.coordenadaX,
@@ -119,6 +129,7 @@ class BindObjectsController extends GetxController {
     listaDeFotos.add(Image.file(imageToAdd));
     listaDePuntos.add(ParVertices());
     listaDeFotosArch.add(imageToAdd);
+    listaDeDimensionesFotos.add(armarImagenParaDimensiones(imageToAdd));
 
     if (listaDeFotos.length == 1) {
       indiceActual = 0;
@@ -130,6 +141,7 @@ class BindObjectsController extends GetxController {
     listaDeFotos.removeAt(index);
     listaDePuntos.removeAt(index);
     listaDeFotosArch.removeAt(index);
+    listaDeDimensionesFotos.removeAt(index);
     if ((indiceActual < index) || (indiceActual == index && index != 0)) {
       indiceActual--;
     }
@@ -149,5 +161,83 @@ class BindObjectsController extends GetxController {
 
   void setNombresUsados(List<String> nombresUsados) {
     this.nombresUsados = nombresUsados;
+  }
+
+  void setAltoExpanded(double maxHeight) {
+    expandedHeight = maxHeight;
+  }
+
+  void setAnchoExpanded(double maxWidth) {
+    expandedWidth = maxWidth;
+  }
+
+  List<VerticesProcesados> traducirPuntos() {
+    double anchoFoto;
+    double altoFoto;
+    double escala;
+    ParVertices verticesExp;
+    (int, int) dimensionesFoto;
+    List<VerticesProcesados> verticesFoto = [];
+
+    double puntoX1;
+    double puntoX2;
+    double puntoY1;
+    double puntoY2;
+
+    for (int i = 0; i < listaDePuntos.length; i++) {
+      verticesExp = listaDePuntos.elementAt(i);
+      dimensionesFoto = listaDeDimensionesFotos.elementAt(i);
+      anchoFoto = dimensionesFoto.$1.toDouble();
+      altoFoto = dimensionesFoto.$2.toDouble();
+
+      puntoY1 = max(verticesExp.verticeViejo.coordenadaY,
+          0.0); //Por si alguno quedó en -1
+      puntoY2 = max(verticesExp.verticeNuevo.coordenadaY, 0.0);
+      puntoX1 = max(verticesExp.verticeViejo.coordenadaX, 0.0);
+      puntoX2 = max(verticesExp.verticeNuevo.coordenadaX, 0.0);
+
+      if (expandedWidth / expandedHeight >= anchoFoto / altoFoto) {
+        //Cuando a la foto le sobra ancho
+        escala = altoFoto / expandedHeight;
+      } else {
+        //Cuando a la foto le sobra alto
+        escala = anchoFoto / expandedWidth;
+        double ajusteAltura = (expandedHeight - (altoFoto / escala)) / 2;
+        puntoY1 = puntoY1 - ajusteAltura;
+        puntoY2 = puntoY2 - ajusteAltura; //Hago el ajuste
+      }
+
+      puntoY1 = puntoY1 * escala;
+      puntoY2 = puntoY2 * escala;
+      puntoX1 = puntoX1 * escala;
+      puntoX2 = puntoX2 * escala;
+
+      if (puntoY1 > puntoY2) {
+        //Punto Y2 va a ser el ymax, por lo cual si puntoY1 es mayor los intercambio
+        var aux = puntoY1;
+        puntoY1 = puntoY2;
+        puntoY2 = aux;
+      }
+
+      if (puntoX1 > puntoX2) {
+        //Lo mismo para los x
+        var aux = puntoX1;
+        puntoX1 = puntoX2;
+        puntoX2 = aux;
+      }
+
+      verticesFoto.add(VerticesProcesados(
+          xmin: puntoX1.toInt(), xmax: puntoX2.toInt(), ymin: puntoY1.toInt(), ymax: puntoY2.toInt(), anchoFoto: anchoFoto.toInt(), altoFoto: altoFoto.toInt()));
+    }
+    return verticesFoto;
+  }
+
+  (int, int) armarImagenParaDimensiones(File archivo) {
+    final image = img.decodeImage(archivo.readAsBytesSync());
+    if (image != null) {
+      return (image.width, image.height);
+    } else {
+      return (0, 0);
+    }
   }
 }

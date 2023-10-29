@@ -13,7 +13,7 @@ import 'package:path/path.dart' as path;
 import 'loading_controller.dart';
 
 class ObjectConfirmationController extends GetxController {
-  List<ParVertices> listaDePuntos = [];
+  List<VerticesProcesados> listaDePuntos = [];
   Image primeraImagen = Image.asset('assets/images/buscartransparente.png');
   List<String> nombresUsados = [];
   List<File> listaDeFotosArch = [];
@@ -21,15 +21,10 @@ class ObjectConfirmationController extends GetxController {
   Rx<String> nombreObjeto = "".obs;
   List<File> archivosEnEnvio = [];
   Future<Directory> appDirectorio = getApplicationDocumentsDirectory();
-  void inicializar(List<Image> listaDeFotos, List<ParVertices> listaDePuntos,
+  void inicializar(Image primeraFoto, List<VerticesProcesados> listaDePuntos,
       List<String> nombresUsados, List<File> listaDeFotosArch) async {
     this.listaDePuntos = listaDePuntos;
-    if (listaDeFotos.isNotEmpty) {
-      primeraImagen = listaDeFotos.first;
-    } else {
-      primeraImagen = Image.asset('assets/images/buscartransparente.png');
-    }
-
+    primeraImagen = primeraFoto;
     this.nombresUsados = nombresUsados;
     this.listaDeFotosArch = listaDeFotosArch;
   }
@@ -46,8 +41,10 @@ class ObjectConfirmationController extends GetxController {
     Get.offAll(() => const LoadingScreen());
     Directory appDirectory = await appDirectorio;
     File imagen;
+    VerticesProcesados vertices;
     for (int i = 0; i < listaDeFotosArch.length; i++) {
       imagen = listaDeFotosArch.elementAt(i);
+      vertices = listaDePuntos.elementAt(i);
       print("foto $i agarrada");
 
       var newFileName = '${nombreObjeto.value}$i';
@@ -59,12 +56,10 @@ class ObjectConfirmationController extends GetxController {
       File imagenRenombrada = imagen.copySync(newPathJPEG);
       print("foto $i copiada");
       File imagenMetadata =
-          armarXML(imagenRenombrada, newPathXML, newFileNameJPEG, newPathJPEG);
+          armarXML(imagenRenombrada, newPathXML, newFileNameJPEG, newPathJPEG, vertices);
 
       archivosEnEnvio.add(imagenRenombrada);
       archivosEnEnvio.add(imagenMetadata);
-      
-      
     }
     print(archivosEnEnvio.length);
     enviarArchivos();
@@ -129,8 +124,7 @@ class ObjectConfirmationController extends GetxController {
   }
 
   File armarXML(
-      File imagen, String destino, String nombreJPEG, String rutaJPEG) {
-    var dimensionesFoto = armarImagenParaDimensiones(imagen);
+      File imagen, String destino, String nombreJPEG, String rutaJPEG, VerticesProcesados vertices) {
     final builder = xml.XmlBuilder();
     builder.element('annotation', nest: () {
       builder.element('folder', nest: nombreObjeto.value);
@@ -140,8 +134,8 @@ class ObjectConfirmationController extends GetxController {
         builder.element('database', nest: 'Unknown');
       });
       builder.element('size', nest: () {
-        builder.element('width', nest: dimensionesFoto.$1);
-        builder.element('height', nest: dimensionesFoto.$2);
+        builder.element('width', nest: vertices.anchoFoto);
+        builder.element('height', nest: vertices.altoFoto);
         builder.element('depth', nest: 3);
       });
       builder.element('segmented', nest: 0);
@@ -151,11 +145,11 @@ class ObjectConfirmationController extends GetxController {
         builder.element('truncated', nest: 0);
         builder.element('difficult', nest: 0);
         builder.element('bndbox', nest: () {
-          builder.element('xmin', nest: 0);
-          builder.element('ymin', nest: 0);
+          builder.element('xmin', nest: vertices.xmin);
+          builder.element('ymin', nest: vertices.ymin);
           //Aca habría que tocar para poner las dimensiones del objeto
-          builder.element('xmax', nest: dimensionesFoto.$1);
-          builder.element('ymax', nest: dimensionesFoto.$2);
+          builder.element('xmax', nest: vertices.xmax);
+          builder.element('ymax', nest: vertices.ymax);
         });
       });
     });
@@ -186,12 +180,3 @@ class ObjectConfirmationController extends GetxController {
 }
 
 enum ResultadoEnvio { exito, falloTimeOut, falloInesperado }
-
-(int, int) armarImagenParaDimensiones(File archivo) {
-  final image = img.decodeImage(archivo.readAsBytesSync());
-  if (image != null) {
-    return (image.width, image.height);
-  } else {
-    return (0, 0);
-  }
-}
