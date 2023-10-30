@@ -91,13 +91,17 @@ class LoadingController extends GetxController {
     }
   }
 
-  void handleServerResponseCreateItem(
-      ObjectConfirmationController controller, ResultadoEnvio resultado) {
+  void handleServerResponseCreateItem(ObjectConfirmationController controller,
+      ResultadoEnvio resultado, bool? chequeado) {
     if (resultado == ResultadoEnvio.exito) {
-      controller.entrenarObjeto();
+      if (chequeado != null) {
+        if(chequeado) {
+          controller.entrenarObjeto();
+        }
+      }
       controller.clear();
       Get.find<BindObjectsController>().resetState();
-      Get.off(() => const SuccessfulCreate());
+      Get.off(() => SuccessfulCreate(chequeado: chequeado));
     } else if (resultado == ResultadoEnvio.falloTimeOut) {
       Get.off(() => FailedCreate(
             controller: controller,
@@ -115,11 +119,13 @@ class LoadingController extends GetxController {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.setString('correo', email);
     await prefs.setString('contrasenia', password);
+    print('correo y contreasenia seteados');
   }
 
   void borrarCredenciales() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.remove('correo');
     await prefs.remove('contrasenia');
+    print('contraseña y correos borrados');
   }
 }

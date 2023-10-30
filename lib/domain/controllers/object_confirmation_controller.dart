@@ -20,6 +20,8 @@ class ObjectConfirmationController extends GetxController {
   Rx<String> nombreObjeto = "".obs;
   List<File> archivosEnEnvio = [];
   Future<Directory> appDirectorio = getApplicationDocumentsDirectory();
+  final isChecked = RxBool(false);
+
   void inicializar(Image primeraFoto, List<VerticesProcesados> listaDePuntos,
       List<String> nombresUsados, List<File> listaDeFotosArch) async {
     this.listaDePuntos = listaDePuntos;
@@ -54,8 +56,8 @@ class ObjectConfirmationController extends GetxController {
 
       File imagenRenombrada = imagen.copySync(newPathJPEG);
       print("foto $i copiada");
-      File imagenMetadata =
-          armarXML(imagenRenombrada, newPathXML, newFileNameJPEG, newPathJPEG, vertices);
+      File imagenMetadata = armarXML(
+          imagenRenombrada, newPathXML, newFileNameJPEG, newPathJPEG, vertices);
 
       archivosEnEnvio.add(imagenRenombrada);
       archivosEnEnvio.add(imagenMetadata);
@@ -119,11 +121,12 @@ class ObjectConfirmationController extends GetxController {
             : ResultadoEnvio.exito);
 
     LoadingController controllerCarga = Get.find<LoadingController>();
-    controllerCarga.handleServerResponseCreateItem(this, resultado);
+    controllerCarga.handleServerResponseCreateItem(
+        this, resultado, isChecked.value);
   }
 
-  File armarXML(
-      File imagen, String destino, String nombreJPEG, String rutaJPEG, VerticesProcesados vertices) {
+  File armarXML(File imagen, String destino, String nombreJPEG, String rutaJPEG,
+      VerticesProcesados vertices) {
     final builder = xml.XmlBuilder();
     builder.element('annotation', nest: () {
       builder.element('folder', nest: nombreObjeto.value);
@@ -175,6 +178,16 @@ class ObjectConfirmationController extends GetxController {
         ruta: 'rna_train_flutter/${nombreObjeto.value}/',
         method: HttpMethod.get);
     conector.hacerRequest();
+  }
+
+  void handleCheckbox(bool? value) {
+    if (value != null) {
+      if (value == true) {
+        isChecked(true);
+      } else {
+        isChecked(false);
+      }
+    }
   }
 }
 

@@ -4,7 +4,6 @@ import 'package:get/get.dart';
 
 import '../../domain/controllers/object_confirmation_controller.dart';
 import '../widgets/custom_text_form_field.dart';
-import 'package:flutter_tts/flutter_tts.dart';
 
 class ObjectConfirmationScreen extends GetView<ObjectConfirmationController> {
   const ObjectConfirmationScreen({super.key});
@@ -52,7 +51,7 @@ class ObjectConfirmationScreen extends GetView<ObjectConfirmationController> {
                     ],
                   ),
                   child: controller.primeraImagen),
-              const SizedBox(height: 100),
+              const SizedBox(height: 75),
               Form(
                 autovalidateMode: AutovalidateMode.onUserInteraction,
                 child: CustomTextFormField(
@@ -69,11 +68,24 @@ class ObjectConfirmationScreen extends GetView<ObjectConfirmationController> {
                   },
                 ),
               ),
-              const SizedBox(height: 100),
+              const SizedBox(height: 25),
+              Row(
+                  children: [
+              Obx(() {
+              return Checkbox(
+                      checkColor: Colors.black,
+                      value: controller.isChecked.value,
+                      onChanged: (value) {
+                      controller.handleCheckbox(value);
+                      },
+                      );
+                      }),
+                  const Text('ENTRENAR INMEDIATAMENTE', style: TextStyle(fontSize: 20)),
+                ],
+              ),
+              const SizedBox(height: 50),
               BotonCustomSinIconoXL(
                   onPressed: () {
-                    FlutterTts tts = FlutterTts();
-                    tts.setLanguage('es');
                     if (!controller.nombreNoValido()) {
                       if (!controller.nombreUsado()) {
                         controller.crearObjeto();

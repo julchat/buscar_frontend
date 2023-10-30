@@ -6,6 +6,7 @@ import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../infrastructure/conector_backend.dart';
+import '../../infrastructure/csrftokenandsession_controller.dart';
 import '../../infrastructure/respuesta.dart';
 import '../../presentation/screens/home_screen.dart';
 import '../forms/login_form.dart';
@@ -19,14 +20,19 @@ class SplashController extends GetxController {
             .getCsrfToken();
 
     if (respuesta.estado == EstadoRespuesta.finalizadaOk) {
-        LecturaCredenciales credenciales = LecturaCredenciales();
-        credenciales.leerCredenciales();
-      if (!credenciales.resultadoOk) {
+      LecturaCredenciales credenciales = await leerCredenciales();
+      if (credenciales.resultadoOk == false) {
         Get.off(() => const LoginScreen());
       } else {
-        Map<String, String> jsonRegistro = LoginForm(usuario: credenciales.correo, contrasenia: credenciales.contrasenia).aMap();
+        Map<String, String> jsonRegistro = LoginForm(
+                usuario: credenciales.correo,
+                contrasenia: credenciales.contrasenia)
+            .aMap();
         final respuestaLogin = await ConectorBackend(
-                ruta: 'login_flutter', method: HttpMethod.post, body: jsonRegistro).hacerRequest();
+                ruta: '/login_flutter/',
+                method: HttpMethod.post,
+                body: jsonRegistro)
+            .hacerRequest();
         manejarRespuestaLogin(respuestaLogin);
       }
     } else {
@@ -67,6 +73,9 @@ class SplashController extends GetxController {
       final body = json.decode(respuesta.respuestaExistente!.body);
       final String token = body['token'];
       final String session = body['session'];
+      print('token $token');
+      print('session $session');
+      var csrfTokenAndSessionController = Get.find<CsrfTokenAndSessionController>();
       csrfTokenAndSessionController.setCsrfToken(token);
       csrfTokenAndSessionController.setSessionId(session);
       Get.off(() => const HomeScreen());
@@ -74,24 +83,31 @@ class SplashController extends GetxController {
       Get.off(() => const LoginScreen());
     }
   }
-}
 
-class LecturaCredenciales {
-  bool resultadoOk = false;
-  String correo = '';
-  String contrasenia = '';
-
-  LecturaCredenciales();
-  void leerCredenciales() async {
+  Future<LecturaCredenciales> leerCredenciales() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     final String? correoLeido = prefs.getString('correo');
     final String? contraseniaLeida = prefs.getString('contrasenia');
-
+    print('correo leido: $correoLeido contraseña leida: $contraseniaLeida');
     if (correoLeido != null && contraseniaLeida != null) {
-      resultadoOk = true;
-      correo = correoLeido;
-      contrasenia = contraseniaLeida;
+      return LecturaCredenciales(
+          resultadoOk: true,
+          correo: correoLeido,
+          contrasenia: contraseniaLeida);
+    } else {
+      return LecturaCredenciales(
+          resultadoOk: false, correo: 'error', contrasenia: 'error');
     }
-
   }
+}
+
+class LecturaCredenciales {
+  final bool resultadoOk;
+  final String correo;
+  final String contrasenia;
+
+  LecturaCredenciales(
+      {required this.resultadoOk,
+      required this.correo,
+      required this.contrasenia});
 }
