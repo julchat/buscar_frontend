@@ -15,6 +15,7 @@ import 'package:buscar_app/presentation/screens/result_screens/failed_search.dar
 import 'package:buscar_app/presentation/screens/result_screens/successful_create.dart';
 import 'package:buscar_app/presentation/screens/result_screens/successful_register.dart';
 import 'package:get/get.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../../infrastructure/respuesta.dart';
 import '../objeto.dart';
 
@@ -36,7 +37,8 @@ class LoadingController extends GetxController {
     }
   }
 
-  void handleServerResponseLogin(Respuesta respuesta) {
+  void handleServerResponseLogin(
+      Respuesta respuesta, String email, String password) {
     String? mensajeError;
 
     if (respuesta.estado == EstadoRespuesta.finalizadaOk) {
@@ -45,6 +47,7 @@ class LoadingController extends GetxController {
       final String session = body['session'];
       csrfTokenAndSessionController.setCsrfToken(token);
       csrfTokenAndSessionController.setSessionId(session);
+      escribirCredenciales(email, password);
       Get.off(() => const HomeScreen());
     } else if (respuesta.estado == EstadoRespuesta.finalizadaMal) {
       mensajeError = respuesta.respuestaExistente?.body;
@@ -60,6 +63,7 @@ class LoadingController extends GetxController {
 
     if (respuesta.estado == EstadoRespuesta.finalizadaOk) {
       csrfTokenAndSessionController.setSessionId("");
+      borrarCredenciales();
       Get.offAll(() => const LoginScreen());
     } else if (respuesta.estado == EstadoRespuesta.finalizadaMal) {
       mensajeError = respuesta.respuestaExistente?.body;
@@ -105,5 +109,17 @@ class LoadingController extends GetxController {
             mensajeDeError: 'OCURRIÓ UN ERROR INESPERADO',
           ));
     }
+  }
+
+  void escribirCredenciales(String email, String password) async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setString('correo', email);
+    await prefs.setString('contrasenia', password);
+  }
+
+  void borrarCredenciales() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.remove('correo');
+    await prefs.remove('contrasenia');
   }
 }

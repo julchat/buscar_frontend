@@ -3,7 +3,6 @@ import 'package:flutter_tts/flutter_tts.dart';
 import 'package:get/get.dart';
 
 import '../../domain/controllers/item_create_controller.dart';
-import 'bind_objects_screen.dart';
 
 class CapturePhotosScreen extends GetView<ItemCreateController> {
   const CapturePhotosScreen({super.key});

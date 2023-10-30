@@ -61,7 +61,7 @@ class ObjetoEnLista extends StatelessWidget {
                   verFotos();
                 },
                 child: AutoSizeText(
-                  objeto.nombre,
+                  objeto.nombre.toUpperCase(),
                   style: TextStyle(
                       color: Colors.yellow, fontSize: tamanioItems / 3),
                   maxLines: 1,

@@ -110,7 +110,7 @@ class _LoginFormState extends State<_LoginForm> {
 
                   Respuesta respuesta = await conector.hacerRequest();
                   LoadingController loadingController = Get.find();
-                  loadingController.handleServerResponseLogin(respuesta);
+                  loadingController.handleServerResponseLogin(respuesta, email, password);
                 }
             , contenido: 'INICIAR SESIÓN', icono: Icons.door_sliding),
            

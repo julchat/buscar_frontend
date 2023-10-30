@@ -7,7 +7,6 @@ import '../../presentation/screens/loading_screen.dart';
 import '../filea64.dart';
 import '../punto_y_vertices.dart';
 import 'dart:io';
-import 'package:image/image.dart' as img;
 import 'package:xml/xml.dart' as xml;
 import 'package:path/path.dart' as path;
 import 'loading_controller.dart';
