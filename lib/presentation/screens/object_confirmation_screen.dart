@@ -83,7 +83,7 @@ class ObjectConfirmationScreen extends GetView<ObjectConfirmationController> {
                   const Text('ENTRENAR INMEDIATAMENTE', style: TextStyle(fontSize: 20)),
                 ],
               ),
-              const SizedBox(height: 50),
+              const SizedBox(height: 30),
               BotonCustomSinIconoXL(
                   onPressed: () {
                     if (!controller.nombreNoValido()) {
