@@ -195,7 +195,7 @@ class ObjetoEnLista extends StatelessWidget {
       }
 
       Get.off(ObjectGalleryScreen(
-          fotos: fotosProcesadas, nombreObjeto: objeto.nombre));
+          fotos: fotosProcesadas, objeto: objeto));
     } else {
       Get.off(const ItemsScreen());
       abrirSnackbar('ERROR', 'NO HAY FOTOS PARA ${objeto.nombre}');

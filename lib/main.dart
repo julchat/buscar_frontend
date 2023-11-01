@@ -3,6 +3,7 @@ import 'package:buscar_app/domain/controllers/bind_objects_controller.dart';
 import 'package:buscar_app/domain/controllers/items_controller.dart';
 import 'package:buscar_app/domain/controllers/loading_controller.dart';
 import 'package:buscar_app/domain/controllers/object_confirmation_controller.dart';
+import 'package:buscar_app/domain/controllers/object_gallery_controller.dart';
 import 'package:buscar_app/domain/controllers/search_result_controller.dart';
 import 'package:buscar_app/domain/controllers/splash_controller.dart';
 import 'package:buscar_app/infrastructure/csrftokenandsession_controller.dart';
@@ -31,6 +32,7 @@ class MyApp extends StatelessWidget {
     Get.put(SearchResultController());
     Get.put(SplashController());
     Get.put(ObjectConfirmationController());
+    Get.put(ObjectGalleryController());
     return GetMaterialApp(
         title: 'buscAR',
         debugShowCheckedModeBanner: false,
